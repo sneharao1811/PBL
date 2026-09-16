@@ -1,0 +1,17 @@
+# Build artifacts
+*.o
+*.a
+*.so
+*.dylib
+*.exe
+bin/
+build/
+
+# Runtime logs and metrics
+*.log
+simulator.log
+benchmarks/*.csv
+
+# OS metadata
+.DS_Store
+Thumbs.db
