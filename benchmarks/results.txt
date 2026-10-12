@@ -1,0 +1,19 @@
+
+================================================================================
+                    BENCHMARK PERFORMANCE COMPARISON
+================================================================================
+Workload Size               : 1000 instructions (PUSH, POP, ADD, STATUS)
+--------------------------------------------------------------------------------
+Metric                      | Single-Process (v1)   | Multi-Process IPC (v2)
+--------------------------------------------------------------------------------
+Total Wall Time             | 2442.27 ms               | 339.82 ms
+Throughput                  | 409 ops/sec           | 2943 ops/sec
+Mean Latency per Op         | 2442.27 us               | 339.82 us
+Memory & Fault Isolation    | None (Shared space)   | Strong (3 separated PIDs)
+Logging Model               | Synchronous File I/O  | Asynchronous Daemon + Thread
+--------------------------------------------------------------------------------
+IPC Overhead Analysis:
+* Total Overhead Added      : -2102.46 ms
+* Average IPC Cost per Msg  : -2102.46 microseconds
+================================================================================
+
