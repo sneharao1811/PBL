@@ -217,6 +217,126 @@ schedule_result_t run_sjf_preemptive(const process_t procs[], int n) {
 }
 
 
+// 4. Priority Non-Preemptive
+schedule_result_t run_priority_non_preemptive(const process_t procs[], int n) {
+    schedule_result_t res;
+    memset(&res, 0, sizeof(res));
+    res.count = n;
+    for (int i = 0; i < n; i++) {
+        res.procs[i] = procs[i];
+        res.procs[i].is_completed = 0;
+    }
+
+    int current_time = 0, completed = 0;
+    while (completed < n) {
+        int best = -1;
+        int best_prio = 1e9;
+        for (int i = 0; i < n; i++) {
+            if (!res.procs[i].is_completed && res.procs[i].arrival_time <= current_time) {
+                if (res.procs[i].priority < best_prio) {
+                    best_prio = res.procs[i].priority;
+                    best = i;
+                }
+            }
+        }
+
+        if (best == -1) {
+            int next_arr = 1e9;
+            for (int i = 0; i < n; i++) {
+                if (!res.procs[i].is_completed && res.procs[i].arrival_time < next_arr) {
+                    next_arr = res.procs[i].arrival_time;
+                }
+            }
+            add_gantt_slice(&res, -1, current_time, next_arr);
+            current_time = next_arr;
+            continue;
+        }
+
+        res.procs[best].start_time = current_time;
+        res.procs[best].response_time = res.procs[best].start_time - res.procs[best].arrival_time;
+        int end = current_time + res.procs[best].burst_time;
+        add_gantt_slice(&res, res.procs[best].pid, current_time, end);
+
+        current_time = end;
+        res.procs[best].completion_time = current_time;
+        res.procs[best].turnaround_time = res.procs[best].completion_time - res.procs[best].arrival_time;
+        res.procs[best].waiting_time = res.procs[best].turnaround_time - res.procs[best].burst_time;
+        res.procs[best].is_completed = 1;
+        completed++;
+    }
+
+    finalize_metrics(&res);
+    return res;
+}
+
+// 5. Priority Preemptive
+schedule_result_t run_priority_preemptive(const process_t procs[], int n) {
+    schedule_result_t res;
+    memset(&res, 0, sizeof(res));
+    res.count = n;
+    for (int i = 0; i < n; i++) {
+        res.procs[i] = procs[i];
+        res.procs[i].remaining_time = procs[i].burst_time;
+        res.procs[i].start_time = -1;
+        res.procs[i].is_completed = 0;
+    }
+
+    int current_time = 0, completed = 0;
+    int last_pid = -2;
+    int slice_start = 0;
+
+    while (completed < n) {
+        int best = -1;
+        int best_prio = 1e9;
+        for (int i = 0; i < n; i++) {
+            if (!res.procs[i].is_completed && res.procs[i].arrival_time <= current_time) {
+                if (res.procs[i].priority < best_prio) {
+                    best_prio = res.procs[i].priority;
+                    best = i;
+                }
+            }
+        }
+
+        int curr_pid = (best != -1) ? res.procs[best].pid : -1;
+        if (curr_pid != last_pid) {
+            if (last_pid != -2) {
+                add_gantt_slice(&res, last_pid, slice_start, current_time);
+            }
+            slice_start = current_time;
+            last_pid = curr_pid;
+        }
+
+        if (best == -1) {
+            current_time++;
+            continue;
+        }
+
+        if (res.procs[best].start_time == -1) {
+            res.procs[best].start_time = current_time;
+            res.procs[best].response_time = current_time - res.procs[best].arrival_time;
+        }
+
+        res.procs[best].remaining_time--;
+        current_time++;
+
+        if (res.procs[best].remaining_time == 0) {
+            res.procs[best].completion_time = current_time;
+            res.procs[best].turnaround_time = res.procs[best].completion_time - res.procs[best].arrival_time;
+            res.procs[best].waiting_time = res.procs[best].turnaround_time - res.procs[best].burst_time;
+            res.procs[best].is_completed = 1;
+            completed++;
+        }
+    }
+
+    if (last_pid != -2) {
+        add_gantt_slice(&res, last_pid, slice_start, current_time);
+    }
+
+    finalize_metrics(&res);
+    return res;
+}
+
+
 // 6. Round Robin
 schedule_result_t run_round_robin(const process_t procs[], int n, int quantum) {
     schedule_result_t res;
