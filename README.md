@@ -1,7 +1,7 @@
 ﻿# Project-Based Learning (PBL)
 
 **Information Science and Engineering**  
-**St Aloysius (Deemed to be University), Mangaluru**  
+**School of Engineering, St Aloysius (Deemed to be University), Mangaluru**  
 *Subject:* PBL | *Team:* Team 8
 
 [![Language: C11](https://img.shields.io/badge/Language-C11-00599C.svg?style=flat-square&logo=c)](https://en.wikipedia.org/wiki/C_(programming_language))
