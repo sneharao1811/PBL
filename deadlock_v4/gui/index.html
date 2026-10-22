@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deadlock Simulation & Analysis System | Team 8 PBL</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Top Navigation Header -->
+    <header class="app-header">
+        <div class="header-brand">
+            <div class="brand-badge">PBL 8</div>
+            <div class="brand-titles">
+                <h1>Deadlock Simulation System</h1>
+                <p>Operating Systems Lab | St Aloysius (Deemed to be University)</p>
+            </div>
+        </div>
+
+        <div class="header-presets">
+            <span class="preset-label">Presets:</span>
+            <button id="presetSafeBtn" class="preset-btn" title="Silberschatz OS standard 5-process safe state">⚡ Textbook Safe</button>
+            <button id="presetDeadlockBtn" class="preset-btn alert-preset" title="Circular wait multi-process deadlock">⚠️ Circular Deadlock</button>
+            <button id="presetUnsafeBtn" class="preset-btn warning-preset" title="Unsafe state avoidance case">⛔ Unsafe Demand</button>
+            <button id="resetSysBtn" class="preset-btn neutral-preset">🔄 Reset System</button>
+        </div>
+
+        <div class="header-status">
+            <div id="systemStateBadge" class="state-badge state-safe">
+                <span class="status-pulse"></span>
+                <span id="systemStateText">SYSTEM SAFE</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Workspace Grid -->
+    <main class="dashboard-grid">
+        <!-- Left Column: Visual RAG Canvas & Telemetry -->
+        <section class="panel graph-panel">
+            <div class="panel-header">
+                <div class="panel-title-wrap">
+                    <h2>Resource Allocation Graph (RAG)</h2>
+                    <span class="panel-subtitle">Interactive Bipartite Topological Mapping</span>
+                </div>
+                <div class="graph-legend">
+                    <span class="legend-item"><span class="legend-dot dot-process"></span> Process ($P_i$)</span>
+                    <span class="legend-item"><span class="legend-dot dot-resource"></span> Resource ($R_j$)</span>
+                    <span class="legend-item"><span class="legend-line line-alloc"></span> Allocated ($R \to P$)</span>
+                    <span class="legend-item"><span class="legend-line line-req"></span> Requested ($P \to R$)</span>
+                </div>
+            </div>
+
+            <!-- Canvas Container -->
+            <div class="canvas-container" id="canvasContainer">
+                <canvas id="ragCanvas"></canvas>
+                <div id="graphOverlayMsg" class="graph-overlay-msg hidden"></div>
+            </div>
+
+            <!-- Safe Sequence Bar -->
+            <div class="safe-sequence-strip" id="safeSeqStrip">
+                <span class="strip-label">Safe Execution Sequence:</span>
+                <div class="seq-pills" id="safeSeqPills">
+                    <span class="seq-pill">P1</span>
+                    <span class="seq-arrow">&rarr;</span>
+                    <span class="seq-pill">P3</span>
+                    <span class="seq-arrow">&rarr;</span>
+                    <span class="seq-pill">P4</span>
+                    <span class="seq-arrow">&rarr;</span>
+                    <span class="seq-pill">P0</span>
+                    <span class="seq-arrow">&rarr;</span>
+                    <span class="seq-pill">P2</span>
+                </div>
+            </div>
+
+            <!-- Resource Utilization Gauges -->
+            <div class="utilization-section">
+                <div class="utilization-header">
+                    <h3>Resource Pool Utilization & Headroom</h3>
+                    <span id="bottleneckNotice" class="bottleneck-tag">Normal Headroom</span>
+                </div>
+                <div class="utilization-bars" id="utilizationBarsContainer">
+                    <!-- Dynamic Bars injected here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Right Column: Interactive Deck & Live Matrix Tables -->
+        <section class="panel control-panel">
+            <!-- Tabs Bar -->
+            <div class="panel-tabs">
+                <button class="tab-btn active" data-tab="matrices">Matrices & Vectors</button>
+                <button class="tab-btn" data-tab="banker">Banker's Avoidance</button>
+                <button class="tab-btn" data-tab="detection">Deadlock & Recovery</button>
+                <button class="tab-btn" data-tab="requests">Resource Dispatcher</button>
+            </div>
+
+            <!-- Tab 1: Matrices -->
+            <div class="tab-content active" id="tab-matrices">
+                <div class="matrix-toolbar">
+                    <div class="btn-group">
+                        <button id="addProcessBtn" class="action-btn sm-btn">+ Add Process</button>
+                        <button id="removeProcessBtn" class="action-btn sm-btn danger-outline">- Remove Process</button>
+                        <button id="addResourceBtn" class="action-btn sm-btn">+ Add Resource</button>
+                        <button id="removeResourceBtn" class="action-btn sm-btn danger-outline">- Remove Resource</button>
+                    </div>
+                    <button id="recalculateBtn" class="action-btn primary-btn sm-btn">⚡ Recalculate Need & Available</button>
+                </div>
+
+                <div class="matrix-card">
+                    <div class="card-title">Available Vector (A) & Total Capacity (E)</div>
+                    <div class="vector-table-wrap" id="vectorTableWrap">
+                        <!-- Rendered by JS -->
+                    </div>
+                </div>
+
+                <div class="matrix-split">
+                    <div class="matrix-card">
+                        <div class="card-title">Allocation Matrix (C)</div>
+                        <div class="table-wrap" id="allocTableWrap"></div>
+                    </div>
+                    <div class="matrix-card">
+                        <div class="card-title">Maximum Claim Matrix (M)</div>
+                        <div class="table-wrap" id="maxTableWrap"></div>
+                    </div>
+                </div>
+
+                <div class="matrix-split">
+                    <div class="matrix-card">
+                        <div class="card-title">Calculated Need Matrix (N = M - C)</div>
+                        <div class="table-wrap" id="needTableWrap"></div>
+                    </div>
+                    <div class="matrix-card">
+                        <div class="card-title">Current Outstanding Requests (Q)</div>
+                        <div class="table-wrap" id="reqTableWrap"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 2: Banker's Avoidance & Stepper -->
+            <div class="tab-content" id="tab-banker">
+                <div class="action-banner">
+                    <div class="banner-info">
+                        <h3>Banker's Safety Algorithm Evaluator</h3>
+                        <p>Determines if a valid sequence exists where all processes can acquire maximum claims and terminate without deadlock.</p>
+                    </div>
+                    <button id="runBankersBtn" class="action-btn primary-btn">Run Safety Algorithm</button>
+                </div>
+
+                <div class="stepper-box">
+                    <div class="stepper-header">
+                        <h4>Step-by-Step Safe Sequence Visualizer</h4>
+                        <div class="stepper-controls">
+                            <button id="stepResetBtn" class="action-btn sm-btn">Reset</button>
+                            <button id="stepNextBtn" class="action-btn sm-btn primary-btn">Next Step &rarr;</button>
+                            <button id="stepAutoBtn" class="action-btn sm-btn">▶ Auto Play</button>
+                        </div>
+                    </div>
+                    <div class="stepper-display" id="stepperDisplay">
+                        <div class="step-work-vector">
+                            <span class="step-lbl">Work Vector:</span>
+                            <span id="stepWorkVal" class="step-val">[ 3, 3, 2 ]</span>
+                        </div>
+                        <div class="step-explanation" id="stepExplanation">
+                            Click "Next Step" to start evaluating candidate processes against the current Work vector.
+                        </div>
+                        <div class="step-process-chips" id="stepProcessChips"></div>
+                    </div>
+                </div>
+
+                <div class="analysis-box" id="bankersAnalysisBox">
+                    <div class="analysis-title">Safety Verdict & Theoretical Proof</div>
+                    <div class="analysis-body" id="bankersVerdictMsg">
+                        Ready. Click "Run Safety Algorithm" to evaluate the current system state.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 3: Deadlock Detection & Recovery -->
+            <div class="tab-content" id="tab-detection">
+                <div class="action-banner">
+                    <div class="banner-info">
+                        <h3>Multi-Instance Deadlock Detection</h3>
+                        <p>Evaluates outstanding requests (Q) against available resources (A) using graph reduction and work vectors.</p>
+                    </div>
+                    <button id="runDetectionBtn" class="action-btn alert-btn">Run Detection Check</button>
+                </div>
+
+                <div class="detection-verdict-box" id="detectionVerdictBox">
+                    <div class="verdict-icon" id="detectionIcon">✓</div>
+                    <div class="verdict-details">
+                        <h4 id="detectionHeading">No Deadlock Detected</h4>
+                        <p id="detectionDetail">All active process requests can be fulfilled. System is in active execution.</p>
+                    </div>
+                </div>
+
+                <div class="recovery-deck">
+                    <div class="deck-header">
+                        <h4>Deadlock Recovery Subsystem</h4>
+                        <span class="deck-subtitle">Select automated intervention policy</span>
+                    </div>
+
+                    <div class="recovery-options">
+                        <label class="recovery-option">
+                            <input type="radio" name="recoveryPolicy" value="one-by-one" checked>
+                            <div class="option-desc">
+                                <strong>Selective Victim Termination (One-by-One)</strong>
+                                <span>Aborts process with highest resource hold until the cycle breaks. Recommended to minimize cost.</span>
+                            </div>
+                        </label>
+                        <label class="recovery-option">
+                            <input type="radio" name="recoveryPolicy" value="terminate-all">
+                            <div class="option-desc">
+                                <strong>Abort All Deadlocked Processes</strong>
+                                <span>Instantly terminates every blocked process and reclaims all resources. Fast but disruptive.</span>
+                            </div>
+                        </label>
+                        <label class="recovery-option">
+                            <input type="radio" name="recoveryPolicy" value="preempt">
+                            <div class="option-desc">
+                                <strong>Resource Preemption & Rollback</strong>
+                                <span>Preempts allocated resources from victim, rolls back request to safety checkpoint.</span>
+                            </div>
+                        </label>
+                    </div>
+
+                    <button id="executeRecoveryBtn" class="action-btn danger-btn">⚡ Execute Recovery Intervention</button>
+                </div>
+            </div>
+
+            <!-- Tab 4: Resource Dispatcher -->
+            <div class="tab-content" id="tab-requests">
+                <div class="action-banner">
+                    <div class="banner-info">
+                        <h3>Simulate Dynamic Resource Requests</h3>
+                        <p>Submit a live resource request vector for an active process. Banker's avoidance will test safety before granting.</p>
+                    </div>
+                </div>
+
+                <div class="dispatch-form">
+                    <div class="form-row">
+                        <label for="reqProcessSelect">Requesting Process:</label>
+                        <select id="reqProcessSelect" class="form-select"></select>
+                    </div>
+
+                    <div class="form-row">
+                        <label>Request Vector (Units per resource):</label>
+                        <div class="request-inputs-grid" id="requestInputsGrid"></div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button id="submitRequestBtn" class="action-btn primary-btn">Submit Request (Test Avoidance)</button>
+                        <button id="releaseResourceBtn" class="action-btn neutral-btn">Release Resources</button>
+                    </div>
+                </div>
+
+                <div class="dispatch-feedback" id="dispatchFeedback">
+                    <div class="feedback-title">Dispatcher Transaction Status</div>
+                    <div class="feedback-msg" id="dispatchFeedbackMsg">Enter request amounts above to simulate dynamic allocation.</div>
+                </div>
+            </div>
+
+            <!-- Bottom Console / Telemetry Log -->
+            <div class="telemetry-log-card">
+                <div class="log-header">
+                    <span>System Execution & Event Stream</span>
+                    <button id="clearLogBtn" class="sm-text-btn">Clear Log</button>
+                </div>
+                <div class="log-stream" id="logStream">
+                    <div class="log-entry log-info"><span class="log-time">[INIT]</span> Deadlock Simulation Engine v4.0 loaded with 5 processes and 3 resources.</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- JavaScript Application -->
+    <script src="app.js"></script>
+</body>
+</html>
