@@ -2,13 +2,13 @@
 
 **Engineer:** Siddanth  
 **Git Identity:** `mallyasiddanth` ([GitHub Profile](https://github.com/mallyasiddanth))  
-**Subsystems Owned:** CPU Core Engine Process, Hardware Subsystems (Stack, Memory, ALU, Queue), Multithreaded Asynchronous Logging Worker, Shortest Job First (SJF) & Shortest Remaining Time First (SRTF) Scheduling Algorithms  
+**Subsystems Owned:** CPU Core Engine Process, Hardware Subsystems (Stack, Memory, ALU, Queue), Multithreaded Asynchronous Logging Worker, Shortest Job First (SJF) & Shortest Remaining Time First (SRTF) Scheduling Algorithms, Deadlock Avoidance Engine & Banker's Safety Algorithm
 
 ---
 
 ## 1. Overview & Responsibilities
 
-Siddanth was responsible for designing and implementing the execution engine of the multi-process CPU simulator—managing hardware simulation state, memory, stack pointer mechanics, instruction queueing, arithmetic operations, and internal multithreaded concurrency. In the scheduling simulator, he authored the greedy and preemptive burst-optimal scheduling algorithms.
+Siddanth was responsible for designing and implementing the execution engine of the multi-process CPU simulator—managing hardware simulation state, memory, stack pointer mechanics, instruction queueing, arithmetic operations, and internal multithreaded concurrency. In the scheduling simulator, he authored the greedy and preemptive burst-optimal scheduling algorithms. For the Deadlock Simulation System, he engineered the Deadlock Avoidance engine using Banker's Algorithm, Safe Sequence evaluation, and dynamic Resource-Request validation.
 
 ### Subsystem Deliverables:
 1. **Core CPU Engine Process (`core_proc`):** Authored [`src_v2/core/core_main.c`](https://github.com/sneharao1811/PBL/blob/main/src_v2/core/core_main.c), implementing CPU state management, IPC instruction receipt, and execution dispatching.
@@ -21,7 +21,8 @@ Siddanth was responsible for designing and implementing the execution engine of 
 4. **Error Detection & Status Code Generation:** Enforced defensive bounds checks for stack overflow (`STATUS_ERR_OVERFLOW`), underflow (`STATUS_ERR_UNDERFLOW`), and operand shortage (`STATUS_ERR_OPERANDS`).
 5. **SJF Non-Preemptive Scheduling Engine:** Implemented `run_sjf_non_preemptive` in [`scheduler_v3/src/scheduler.c`](https://github.com/sneharao1811/PBL/blob/main/scheduler_v3/src/scheduler.c).
 6. **SRTF Preemptive Scheduling Engine:** Implemented `run_srtf_preemptive` in [`scheduler_v3/src/scheduler.c`](https://github.com/sneharao1811/PBL/blob/main/scheduler_v3/src/scheduler.c), supporting cycle-by-cycle preemption.
-7. **Pipes and FIFOs Research:** Prototyped anonymous pipes and named FIFOs in [`research/siddanth_pipes_fifos/pipe_demo.c`](https://github.com/sneharao1811/PBL/blob/main/research/siddanth_pipes_fifos/pipe_demo.c), `fifo_writer.c`, and `fifo_reader.c`, authoring the technical report `IPC(Through Pipes and FIFOs).pdf`.
+7. **Banker's Deadlock Avoidance Engine:** Authored [`deadlock_v4/src/banker.c`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/src/banker.c), implementing the Banker's Safety Algorithm to discover Safe Sequences $\langle P_i \dots \rangle$ and the Resource-Request algorithm to test hypothetical state transitions and avoid unsafe operations.
+8. **Pipes and FIFOs Research:** Prototyped anonymous pipes and named FIFOs in [`research/siddanth_pipes_fifos/pipe_demo.c`](https://github.com/sneharao1811/PBL/blob/main/research/siddanth_pipes_fifos/pipe_demo.c), `fifo_writer.c`, and `fifo_reader.c`, authoring the technical report `IPC(Through Pipes and FIFOs).pdf`.
 
 ---
 

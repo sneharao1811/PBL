@@ -2,13 +2,13 @@
 
 **Engineer:** Waqqas  
 **Git Identity:** `Waqqas H` / `w4qq4s` ([GitHub Profile](https://github.com/w4qq4s))  
-**Subsystems Owned:** Process Lifecycle Supervisor, POSIX IPC Protocol Definition, Baseline Monolithic Simulator, Automated Benchmarking Suite, Scheduler Visualization & Test Engine  
+**Subsystems Owned:** Process Lifecycle Supervisor, POSIX IPC Protocol Definition, Baseline Monolithic Simulator, Automated Benchmarking Suite, Scheduler Visualization & Test Engine, Deadlock System Architecture & Core State Models
 
 ---
 
 ## 1. Overview & Responsibilities
 
-Waqqas served as the integration lead and systems architect across the project, responsible for designing the IPC protocol contracts, supervising process lifecycles, establishing the build automation framework, engineering empirical performance benchmarks, and developing visualization tooling for the scheduling engine.
+Waqqas served as the integration lead and systems architect across the project, responsible for designing the IPC protocol contracts, supervising process lifecycles, establishing the build automation framework, engineering empirical performance benchmarks, developing visualization tooling for the scheduling engine, and architecting the data structures and core state engine for the Week 4 Deadlock Simulation System.
 
 ### Subsystem Deliverables:
 1. **IPC Protocol Specification & Framing:** Authored [`src_v2/include/protocol.h`](https://github.com/sneharao1811/PBL/blob/main/src_v2/include/protocol.h), defining binary packet layouts (`ipc_req_t`, `ipc_resp_t`, `ipc_log_t`), operation codes, and POSIX queue endpoints.
@@ -16,7 +16,8 @@ Waqqas served as the integration lead and systems architect across the project, 
 3. **Monolithic Baseline Engine (v1):** Developed [`baseline_v1/simulator_v1.c`](https://github.com/sneharao1811/PBL/blob/main/baseline_v1/simulator_v1.c) to establish a synchronous execution baseline for empirical performance comparison.
 4. **Benchmarking Harness & Analytics:** Designed [`benchmarks/generate_workload.py`](https://github.com/sneharao1811/PBL/blob/main/benchmarks/generate_workload.py) and [`benchmarks/run_benchmark.sh`](https://github.com/sneharao1811/PBL/blob/main/benchmarks/run_benchmark.sh), measuring wall-clock time, ops/sec throughput, and per-operation latency across 1,000 and 5,000 operation workloads.
 5. **Scheduler Visualization & Test Suite:** Authored the ASCII Gantt chart renderer, process metrics summarization (`finalize_metrics`), and automated test dataset runner in [`scheduler_v3/src/scheduler.c`](https://github.com/sneharao1811/PBL/blob/main/scheduler_v3/src/scheduler.c).
-6. **Shared Memory IPC Research:** Researched POSIX Shared Memory (`shm_open`, `mmap`, `shm_unlink`) in [`research/waqqas_shared_memory/shm_demo.c`](https://github.com/sneharao1811/PBL/blob/main/research/waqqas_shared_memory/shm_demo.c) and authored the technical paper `Inter Process Communication (IPC) - Fundamentals and Shared Memory.pdf`.
+6. **Deadlock State Models & Core Math Engine:** Authored [`deadlock_v4/include/deadlock.h`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/include/deadlock.h) and [`deadlock_v4/src/deadlock_core.c`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/src/deadlock_core.c), defining vectors and matrices ($E, A, C, M, N, Q$), need recalculation, resource headroom validation, benchmark presets, and telemetry formatters.
+7. **Shared Memory IPC Research:** Researched POSIX Shared Memory (`shm_open`, `mmap`, `shm_unlink`) in [`research/waqqas_shared_memory/shm_demo.c`](https://github.com/sneharao1811/PBL/blob/main/research/waqqas_shared_memory/shm_demo.c) and authored the technical paper `Inter Process Communication (IPC) - Fundamentals and Shared Memory.pdf`.
 
 ---
 

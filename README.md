@@ -1,4 +1,4 @@
-﻿# Project-Based Learning (PBL)
+# Project-Based Learning (PBL)
 
 **Information Science and Engineering**  
 **School of Engineering, St Aloysius (Deemed to be University), Mangaluru**  
@@ -24,10 +24,11 @@
 
 ## Project Architecture & Scope
 
-This project implements two core systems deliverables for the OS PBL curriculum:
+This project implements three core systems deliverables for the OS PBL curriculum:
 
 1. **[Week 3: CPU Process Scheduling Simulator](#1-week-3--cpu-process-scheduling-simulator)**: An interactive simulator evaluating **FCFS, SJF (Preemptive & Non-Preemptive), Priority (Preemptive & Non-Preemptive), and Round Robin** with automated ASCII Gantt charts and performance analysis across 3 test datasets.
 2. **[Week 4: Multi-Process CPU Simulator with POSIX IPC](#2-week-4--multi-process-simulator-with-posix-ipc)**: A modular system decoupling a single-process CPU simulator into **three independent cooperating processes** (UI, Core, Logger) communicating via POSIX Message Queues with an asynchronous in-core worker thread.
+3. **[Week 4: Interactive Deadlock Simulation System (with GUI)](#3-week-4--interactive-deadlock-simulation-system-with-gui)**: An interactive simulation and analysis platform managing multi-process resource allocation, evaluating **SAFE / UNSAFE / DEADLOCKED** states, running **Banker's Algorithm**, detecting deadlocks, executing automated recovery policies, and visualizing **Resource Allocation Graphs (RAG)** via both a 12-item CLI and a modern Graphical User Interface (GUI).
 
 ---
 
@@ -227,11 +228,45 @@ Both implementations were evaluated against an automated workload of **1,000 ins
 
 ---
 
+## 3. Week 4 — Interactive Deadlock Simulation System (with GUI)
+
+### Objective
+> *"Design and implement an interactive Deadlock Simulation System that demonstrates how an Operating System handles resource allocation, requests, safe/unsafe states, deadlock detection, Banker's Algorithm avoidance, Resource Allocation Graphs, and deadlock recovery, complete with a proper GUI."*
+
+### System Capabilities & Mathematical Models
+
+The simulator manages $N$ processes competing for $M$ resource types with dynamic headroom tracking:
+* **Total Resource Vector ($E$):** $[E_0, E_1, \dots, E_{M-1}]$ total system capacity.
+* **Available Resource Vector ($A$):** Free instances calculated dynamically: $A_j = E_j - \sum_{i=0}^{N-1} C_{i,j}$.
+* **Allocation Matrix ($C$):** Resources currently held by active processes ($N \times M$).
+* **Maximum Claim Matrix ($M$):** Declared peak resource demand ($N \times M$).
+* **Need Matrix ($N$):** Remaining potential claim: $N_{i,j} = M_{i,j} - C_{i,j}$.
+* **Outstanding Request Matrix ($Q$):** Currently blocked or pending requests.
+
+### Core Algorithmic Engines
+
+1. **Banker's Algorithm for Deadlock Avoidance (`banker.c`):**
+   - **Safety Evaluation:** Maintains a `Work` vector and `Finish` array to compute whether a complete Safe Sequence exists ($\langle P_1, P_3, P_4, P_0, P_2 \rangle$).
+   - **Resource-Request Avoidance:** Validates $\text{Request}_i \le \text{Need}_i$ and $\text{Request}_i \le \text{Available}$. Performs a hypothetical state transition and executes the safety algorithm; denies requests that would plunge the system into an **UNSAFE** state.
+2. **Multi-Instance Deadlock Detection (`detection.c`):**
+   - Identifies permanent circular waits across multiple resource instances using request-matrix reduction. Pinpoints all deadlocked processes.
+3. **Automated Deadlock Recovery Engine (`recovery.c`):**
+   - **Selective Victim Termination:** Uses a cost heuristic (evaluating total allocated resources held) to abort processes one-by-one until the deadlock cycle is broken.
+   - **Total Process Abort:** Simultaneously terminates all deadlocked processes and reclaims resources.
+   - **Resource Preemption:** Preempts held allocations from victim processes and rolls back state to a checkpoint.
+4. **Resource Allocation Graph (RAG) (`rag.c` & HTML5 Canvas GUI):**
+   - Bipartite topological graph rendering Process nodes ($P_i$), Resource nodes ($R_j$ with instance indicators), solid assignment arrows ($R_j \to P_i$), and dashed request arrows ($P_i \to R_j$).
+   - Real-time cycle and deadlock highlighting with warning pulses.
+5. **Modern Interactive Graphical User Interface (GUI):**
+   - Zero-dependency interactive web console (`deadlock_v4/gui/`) with high-DPI canvas RAG, live matrix editors, step-by-step Banker's algorithm playback, dynamic request testing, and real-time utilization meters.
+
+---
+
 ## Quickstart & Execution Guide
 
 ### Prerequisites
-* GCC 9+ with POSIX realtime (`-lrt`) and pthread (`-pthread`) support.
-* Linux or WSL2 (Ubuntu 20.04 / 22.04 LTS).
+* GCC 9+ with POSIX realtime (`-lrt`) and pthread (`-pthread`) support (for Linux/WSL2).
+* Python 3.8+ (for cross-platform standalone CLI, automated runners, and GUI local server).
 
 ### 1. Build All Targets
 ```bash
@@ -243,29 +278,30 @@ make all
 ./bin/scheduler_v3
 ```
 
-### 3. Run Multi-Process CPU Simulator (Week 4)
+### 3. Run Multi-Process CPU Simulator (Week 4 POSIX IPC)
 ```bash
 ./bin/simulator_v2
 ```
-```text
-SIM> PUSH 100
--> Stack: pushed 100 (sp=0)
-SIM> PUSH 50
--> Stack: pushed 50 (sp=1)
-SIM> ADD
--> ALU: 100 + 50 = 150 (pushed to stack)
-SIM> STATUS
-=== CPU STATE ===
-Stack Pointer: 0
-Top of Stack: 150
-Instruction Count: 4
-Queue Pending: 0
-=================
-SIM> EXIT
-Core acknowledged shutdown.
+
+### 4. Run Deadlock Simulation System CLI (12-Option Menu)
+```bash
+# On Linux / WSL2:
+./bin/deadlock_cli
+# Cross-platform / Windows:
+python deadlock_v4/deadlock_sim.py
 ```
 
-### 4. Run Automated Benchmark Comparison
+### 5. Launch Deadlock Simulation System GUI
+```bash
+# Make target:
+make deadlock-gui
+# Or run direct python server (automatically opens browser):
+python deadlock_v4/gui/server.py
+# Or on Windows, double click:
+bin/deadlock_gui.bat
+```
+
+### 6. Run Automated Benchmark Comparison
 ```bash
 make benchmark
 ```
@@ -278,6 +314,22 @@ make benchmark
 PBL/
 ├── README.md                          # Main project documentation & laboratory report
 ├── Makefile                           # Master build orchestrator
+│
+├── deadlock_v4/                       # Week 4: Deadlock Simulation System & GUI
+│   ├── include/deadlock.h             # Core data models (E, A, C, M, N, Q), state definitions
+│   ├── src/deadlock_core.c            # Matrix math, presets, telemetry formatters
+│   ├── src/banker.c                   # Banker's safety & resource-request algorithms
+│   ├── src/detection.c                # Multi-instance deadlock detection algorithm
+│   ├── src/recovery.c                 # Victim selection & automated recovery strategies
+│   ├── src/rag.c                      # Resource Allocation Graph builder & ASCII exporter
+│   ├── src/deadlock_cli.c             # 12-item interactive terminal CLI shell
+│   ├── deadlock_sim.py                # Standalone cross-platform CLI & simulation engine
+│   ├── gui/                           # Interactive Graphical User Interface (GUI)
+│   │   ├── index.html                 # Dashboard layout & controls
+│   │   ├── style.css                  # High-contrast systems console design system
+│   │   ├── app.js                     # Canvas RAG engine, live matrix binding, stepper
+│   │   └── server.py                  # Local zero-dependency HTTP server & browser launcher
+│   └── Makefile
 │
 ├── scheduler_v3/                      # Week 3: CPU Process Scheduling Simulator
 │   ├── include/scheduler.h            # Algorithm headers and process structures

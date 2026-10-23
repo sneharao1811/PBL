@@ -2,13 +2,13 @@
 
 **Engineer:** Rafath  
 **Git Identity:** `moidrafath04` ([GitHub Profile](https://github.com/moidrafath04))  
-**Subsystems Owned:** Dedicated Logging Daemon Process, Log Stream Management, Timestamp Formatting, Priority Scheduling Algorithms (Preemptive & Non-Preemptive)  
+**Subsystems Owned:** Dedicated Logging Daemon Process, Log Stream Management, Timestamp Formatting, Priority Scheduling Algorithms (Preemptive & Non-Preemptive), Multi-Instance Deadlock Detection Algorithm & Recovery Engine
 
 ---
 
 ## 1. Overview & Responsibilities
 
-Rafath was responsible for designing and implementing the asynchronous logging daemon for the multi-process simulator, managing disk stream persistence, formatting structured event telemetry, and developing the priority-based process scheduling algorithms in the CPU scheduling suite.
+Rafath was responsible for designing and implementing the asynchronous logging daemon for the multi-process simulator, managing disk stream persistence, formatting structured event telemetry, developing the priority-based process scheduling algorithms in the CPU scheduling suite, and authoring the multi-instance Deadlock Detection Algorithm and automated Recovery subsystem for the Week 4 Deadlock Simulation System.
 
 ### Subsystem Deliverables:
 1. **Dedicated Logging Daemon (`logger_proc`):** Authored [`src_v2/logger/logger_main.c`](https://github.com/sneharao1811/PBL/blob/main/src_v2/logger/logger_main.c), implementing a standalone daemon process continuously listening on `/pbl8_to_logger`.
@@ -18,7 +18,9 @@ Rafath was responsible for designing and implementing the asynchronous logging d
 5. **Sentinel-Driven Daemon Shutdown:** Designed termination handling based on the supervisor's `__SHUTDOWN__` control packet, ensuring all pending logs in the IPC queue are flushed to disk before closing descriptors and exiting.
 6. **Non-Preemptive Priority Scheduling Engine:** Implemented `run_priority_non_preemptive` in [`scheduler_v3/src/scheduler.c`](https://github.com/sneharao1811/PBL/blob/main/scheduler_v3/src/scheduler.c).
 7. **Preemptive Priority Scheduling Engine:** Implemented `run_priority_preemptive` in [`scheduler_v3/src/scheduler.c`](https://github.com/sneharao1811/PBL/blob/main/scheduler_v3/src/scheduler.c).
-8. **Sockets, Signals & Semaphores Research:** Prototyped TCP socket servers/clients, POSIX semaphores, and signal handlers in [`research/rafath_sockets_signals/tcp_server.c`](https://github.com/sneharao1811/PBL/blob/main/research/rafath_sockets_signals/tcp_server.c), `tcp_client.c`, `semaphore_demo.c`, and `signal_demo.c`, authoring the comparative research paper `IPC Through Sockets, Signals and Semaphores (with a Comparison of All IPC Methods).pdf`.
+8. **Multi-Instance Deadlock Detection Algorithm:** Authored [`deadlock_v4/src/detection.c`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/src/detection.c), identifying permanently blocked processes by evaluating outstanding requests against available instances via matrix reduction.
+9. **Deadlock Recovery Engine:** Authored [`deadlock_v4/src/recovery.c`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/src/recovery.c), implementing cost-effective victim selection, selective process termination, and resource preemption with state rollback.
+10. **Sockets, Signals & Semaphores Research:** Prototyped TCP socket servers/clients, POSIX semaphores, and signal handlers in [`research/rafath_sockets_signals/tcp_server.c`](https://github.com/sneharao1811/PBL/blob/main/research/rafath_sockets_signals/tcp_server.c), `tcp_client.c`, `semaphore_demo.c`, and `signal_demo.c`, authoring the comparative research paper `IPC Through Sockets, Signals and Semaphores (with a Comparison of All IPC Methods).pdf`.
 
 ---
 
