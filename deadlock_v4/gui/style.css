@@ -1173,3 +1173,18 @@ table.matrix-table input:focus { background: #fff; box-shadow: none; }
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
 }
+
+/* Keep the graph title and legend legible inside the dashboard column. */
+.panel-header { min-width: 0; }
+.panel-title-wrap { min-width: 225px; flex: 0 1 300px; }
+.graph-legend {
+    display: grid;
+    grid-template-columns: repeat(2, max-content);
+    align-items: center;
+    flex: 0 0 auto;
+    gap: .35rem .8rem;
+}
+.legend-item { white-space: nowrap; }
+@media (max-width: 760px) {
+    .panel-title-wrap { min-width: 0; }
+}
