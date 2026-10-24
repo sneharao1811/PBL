@@ -407,7 +407,7 @@
         const dpr = window.devicePixelRatio || 1;
         canvas.width = rect.width * dpr;
         canvas.height = rect.height * dpr;
-        ctx.scale(dpr, dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
 
     function renderRAG() {
@@ -418,7 +418,7 @@
         ctx.clearRect(0, 0, width, height);
 
         // Grid background effect
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.025)';
+        ctx.strokeStyle = 'rgba(38, 58, 76, 0.055)';
         ctx.lineWidth = 1;
         const gridSize = 28;
         for (let x = 0; x < width; x += gridSize) {
@@ -516,19 +516,19 @@
             ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
 
             if (!p.active) {
-                ctx.fillStyle = '#1e293b';
-                ctx.strokeStyle = '#475569';
+                ctx.fillStyle = '#eef1f4';
+                ctx.strokeStyle = '#b9c3cc';
             } else if (p.isDeadlocked) {
                 const glow = Math.sin(pulseTime * 4) * 8 + 14;
                 ctx.shadowColor = '#ef4444';
-                ctx.shadowBlur = glow;
-                ctx.fillStyle = 'rgba(239, 68, 68, 0.25)';
+                ctx.shadowBlur = Math.min(glow / 3, 6);
+                ctx.fillStyle = 'rgba(165, 59, 56, 0.12)';
                 ctx.strokeStyle = '#ef4444';
             } else {
-                ctx.shadowColor = '#3b82f6';
-                ctx.shadowBlur = 10;
-                ctx.fillStyle = 'rgba(59, 130, 246, 0.2)';
-                ctx.strokeStyle = '#3b82f6';
+                ctx.shadowColor = '#35749e';
+                ctx.shadowBlur = 3;
+                ctx.fillStyle = 'rgba(53, 116, 158, 0.10)';
+                ctx.strokeStyle = '#35749e';
             }
             ctx.lineWidth = 2.5;
             ctx.fill();
@@ -536,7 +536,7 @@
             ctx.restore();
 
             // Label
-            ctx.fillStyle = p.active ? '#ffffff' : '#64748b';
+            ctx.fillStyle = p.active ? '#17212b' : '#6c7a87';
             ctx.font = '600 12px "JetBrains Mono", monospace';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
@@ -556,9 +556,9 @@
 
             ctx.save();
             ctx.shadowColor = '#a855f7';
-            ctx.shadowBlur = 8;
-            ctx.fillStyle = 'rgba(168, 85, 247, 0.15)';
-            ctx.strokeStyle = '#a855f7';
+            ctx.shadowBlur = 2;
+            ctx.fillStyle = 'rgba(128, 98, 154, 0.08)';
+            ctx.strokeStyle = '#80629a';
             ctx.lineWidth = 2;
 
             roundRect(ctx, rx, ry, r.w, r.h, 8);
@@ -567,7 +567,7 @@
             ctx.restore();
 
             // Header Name
-            ctx.fillStyle = '#e2e8f0';
+            ctx.fillStyle = '#17212b';
             ctx.font = '600 11px "Outfit", sans-serif';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'top';
@@ -587,13 +587,13 @@
                 if (d < inUse) {
                     ctx.fillStyle = '#10b981'; // In use (allocated)
                 } else {
-                    ctx.fillStyle = '#64748b'; // Free instance
+                    ctx.fillStyle = '#aab5bf'; // Free instance
                 }
                 ctx.fill();
             }
 
             // Available count badge
-            ctx.fillStyle = '#94a3b8';
+            ctx.fillStyle = '#52616e';
             ctx.font = '500 9px "JetBrains Mono", monospace';
             ctx.fillText(`Avail: ${r.available}/${r.total}`, r.x, ry + r.h + 8);
         });
@@ -892,7 +892,7 @@
             detail.textContent = `Processes [${state.deadlockedPids.map(p => state.processes[p].name).join(', ')}] are in a mutual circular hold-and-wait state.`;
         } else {
             box.className = 'detection-verdict-box';
-            icon.textContent = '✓';
+            icon.textContent = 'OK';
             heading.textContent = 'No Deadlock Detected';
             detail.textContent = 'All currently requested and active resources can execute safely.';
         }
@@ -990,12 +990,12 @@
             const res = runBankersSafetyCheck();
             const msgBox = document.getElementById('bankersVerdictMsg');
             if (res.isSafe) {
-                msgBox.innerHTML = `<strong style="color:var(--state-safe);">✓ SYSTEM IS SAFE</strong><br>` +
+                msgBox.innerHTML = `<strong style="color:var(--state-safe);">SYSTEM IS SAFE</strong><br>` +
                     `Valid Safe Execution Sequence: &lt; ${res.sequence.map(i => state.processes[i].name).join(' &rarr; ')} &gt;.<br>` +
                     `Every active process can be guaranteed completion without entering deadlock.`;
                 addLogEntry(`Banker's Algorithm: Safe Sequence found < ${res.sequence.map(i => state.processes[i].name).join(' -> ')} >.`, 'success');
             } else {
-                msgBox.innerHTML = `<strong style="color:var(--state-unsafe);">⚠ SYSTEM IS IN AN UNSAFE STATE</strong><br>` +
+                msgBox.innerHTML = `<strong style="color:var(--state-unsafe);">SYSTEM IS IN AN UNSAFE STATE</strong><br>` +
                     `No process can be satisfied with the remaining Available resources. An imminent deadlock may occur under maximum demand.`;
                 addLogEntry(`Banker's Algorithm: System is in an UNSAFE state.`, 'warning');
             }
