@@ -1,4 +1,4 @@
-# Subsystem Architecture Notes: UI Process, Interactive Shell & FCFS/RR Scheduling
+# Subsystem Architecture Notes: UI Process, Interactive Shell, FCFS/RR Scheduling & Deadlock GUI/RAG
 
 **Engineer:** Sneha  
 **Git Identity:** `sneharao1811` ([GitHub Profile](https://github.com/sneharao1811))  
@@ -31,6 +31,11 @@ Sneha was responsible for designing and implementing the interactive frontend pr
 | [`src_v2/ui/ui_main.c`](https://github.com/sneharao1811/PBL/blob/main/src_v2/ui/ui_main.c) | Interactive CLI shell: prompt display, command parser (`PUSH`, `POP`, `ADD`, `STATUS`, `EXIT`), IPC packet serialization, blocking response listener, and clean exit handler. |
 | [`scheduler_v3/src/scheduler.c`](https://github.com/sneharao1811/PBL/blob/main/scheduler_v3/src/scheduler.c) *(Lines 44–98)* | First-Come-First-Served (`run_fcfs`) scheduling algorithm implementation. |
 | [`scheduler_v3/src/scheduler.c`](https://github.com/sneharao1811/PBL/blob/main/scheduler_v3/src/scheduler.c) *(Lines 324–412)* | Round Robin (`run_round_robin`) time-sliced scheduling algorithm implementation. |
+| [`deadlock_v4/src/deadlock_cli.c`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/src/deadlock_cli.c) | Full 12-option interactive CLI shell: process/resource creation, matrix input, request dispatching, Banker's evaluation, detection, recovery, and status display. |
+| [`deadlock_v4/src/rag.c`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/src/rag.c) | Resource Allocation Graph engine: bipartite graph builder, assignment/request edge enumeration, ASCII terminal display, JSON telemetry export, and Graphviz DOT export. |
+| [`deadlock_v4/gui/index.html`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/gui/index.html) | GUI dashboard layout: header with presets bar, Canvas RAG panel, matrix editor panel, algorithm controls, request dispatch, and activity log stream. |
+| [`deadlock_v4/gui/style.css`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/gui/style.css) | Design system: dark systems-console theme with CSS custom properties, glassmorphism panels, pulse animations, responsive grid layout, and state-colored indicators. |
+| [`deadlock_v4/gui/app.js`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/gui/app.js) | GUI application controller (1174 lines): reactive state model, Canvas RAG renderer with animated edges, Banker's step-by-step playback stepper, detection/recovery engines, live matrix binding, resource request dispatcher, and event system. |
 | [`README.md`](https://github.com/sneharao1811/PBL/blob/main/README.md) | Laboratory technical report, team matrix, sequence diagrams, benchmark comparisons, and user guide. |
 | [`research/sneha_message_queues/sender.c`](https://github.com/sneharao1811/PBL/blob/main/research/sneha_message_queues/sender.c) | Phase 1 prototype: Message queue sender process demonstrating discrete message generation. |
 | [`research/sneha_message_queues/receiver.c`](https://github.com/sneharao1811/PBL/blob/main/research/sneha_message_queues/receiver.c) | Phase 1 prototype: Message queue receiver process reading formatted IPC payloads. |
@@ -67,6 +72,8 @@ In [`scheduler_v3/src/scheduler.c`](https://github.com/sneharao1811/PBL/blob/mai
 ## 4. Git Commit History
 
 ```text
+30ad198 | 2026-10-22 | feat(deadlock-gui): implement interactive graphical user interface and visual RAG canvas
+2fe2bc7 | 2026-10-21 | feat(deadlock): implement interactive CLI menu and RAG topological graph
 0e617cf | 2026-10-13 | docs: comprehensive laboratory report and README update
 9cc42f5 | 2026-10-11 | feat(scheduler): implement FCFS and Round Robin scheduling algorithms
 b869442 | 2026-10-07 | feat(ui): implement interactive CLI frontend process

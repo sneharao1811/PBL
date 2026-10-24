@@ -1,6 +1,6 @@
 # Project Architecture & Subsystem Ownership Notes
 
-This directory contains technical documentation and subsystem breakdowns for the **PBL Multi-Process POSIX Simulator and Scheduling Suite**. It documents how the system was decomposed, the modules each team member designed and implemented, inter-process communication contracts, and the commit history tracking project development.
+This directory contains technical documentation and subsystem breakdowns for the **PBL Multi-Process POSIX Simulator, Scheduling Suite, and Interactive Deadlock Simulation System**. It documents how the system was decomposed, the modules each team member designed and implemented, inter-process communication contracts, deadlock algorithm ownership, and the commit history tracking project development.
 
 ---
 
@@ -81,7 +81,15 @@ The project commit log tracks the collaborative evolution of the codebase:
 
 | Commit | Author | Date | Subject | Scope |
 | :--- | :--- | :--- | :--- | :--- |
-| [`6246213`](https://github.com/sneharao1811/PBL/commit/6246213c2d7a09876577c4ae926d1dd5f970448d) | Waqqas H | 2026-10-14 | `docs: add SOE to readme.md` | Institutional header documentation |
+| [`c517012`](https://github.com/sneharao1811/PBL/commit/c517012794233bd846ac4aa9d780891163a31ae1) | w4qq4s | 2026-10-23 | `docs: update laboratory report and student deliverables for deadlock simulation` | Deadlock docs, member notes, architecture spec |
+| [`f388fb7`](https://github.com/sneharao1811/PBL/commit/f388fb71eba4de180699843e750591899c7bf9e4) | Waqqas H | 2026-10-23 | `feat(deadlock): integrate build orchestration, standalone runner, and test suite` | Makefile targets, Python runner, test harness |
+| [`30ad198`](https://github.com/sneharao1811/PBL/commit/30ad198f5c3704947a616b2d451a05fdb742f13d) | sneharao1811 | 2026-10-22 | `feat(deadlock-gui): implement interactive graphical user interface and visual RAG canvas` | GUI: index.html, style.css, app.js, server.py |
+| [`2fe2bc7`](https://github.com/sneharao1811/PBL/commit/2fe2bc732d63ba500b8a0d61460070f0609e9e83) | sneharao1811 | 2026-10-21 | `feat(deadlock): implement interactive CLI menu and RAG topological graph` | deadlock_cli.c, rag.c (ASCII/JSON/DOT export) |
+| [`c021014`](https://github.com/sneharao1811/PBL/commit/c02101434a3deeace839f56c19b89b5bf739e29a) | moidrafath04 | 2026-10-20 | `feat(deadlock): implement multi-instance deadlock detection and recovery engine` | detection.c, recovery.c (3 strategies) |
+| [`7e6c6bf`](https://github.com/sneharao1811/PBL/commit/7e6c6bf7d4b6aa3c6d1d24bb3217d79d33a8d33d) | mallyasiddanth | 2026-10-19 | `feat(deadlock): implement Banker's avoidance algorithm and safe sequence generator` | banker.c (Safety, Resource-Request, Release) |
+| [`11a7242`](https://github.com/sneharao1811/PBL/commit/11a7242b9a09d017a31ac2a6d9773b15c22ef7ec) | Waqqas H | 2026-10-18 | `feat(deadlock): initialize state models, headers, and core matrix math` | deadlock.h, deadlock_core.c, presets |
+| [`9211006`](https://github.com/sneharao1811/PBL/commit/9211006eff1273c39a50ab79d528951444baa561) | w4qq4s | 2026-10-14 | `docs: student-specific documentation added` | deliverables_notes/ member files |
+| [`6246213`](https://github.com/sneharao1811/PBL/commit/6246213c2d7a09876577c4ae926d1dd5f970448d) | w4qq4s | 2026-10-14 | `docs: add SOE to readme.md` | Institutional header documentation |
 | [`0e617cf`](https://github.com/sneharao1811/PBL/commit/0e617cf7add3af0249b4171dc1f16cea4ecf0222) | sneharao1811 | 2026-10-13 | `docs: comprehensive laboratory report and README update` | Full laboratory report & technical specifications |
 | [`25c711d`](https://github.com/sneharao1811/PBL/commit/25c711d180d05a38be2b60a94af274817525d995) | Waqqas H | 2026-10-12 | `perf: add synthetic workload generator and benchmark comparison suite` | Benchmark harness, workload generator, and metrics |
 | [`411290c`](https://github.com/sneharao1811/PBL/commit/411290c51b82d5a7d5565d85026151ea60f772c5) | Waqqas H | 2026-10-12 | `feat(scheduler): add ASCII Gantt chart renderer, test suites, and comparison table` | Gantt visualization, test runner, comparative metrics |
@@ -120,4 +128,13 @@ make benchmark
 
 # Run the Process Scheduling Simulator
 ./bin/scheduler_v3
+
+# Run Deadlock Simulation CLI (native C)
+./bin/deadlock_cli
+
+# Run Deadlock Simulation CLI (cross-platform Python)
+python deadlock_v4/deadlock_sim.py
+
+# Launch Interactive Deadlock GUI (opens browser)
+make deadlock-gui
 ```

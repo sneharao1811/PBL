@@ -1,4 +1,4 @@
-# Subsystem Architecture Notes: Logging Daemon & Priority Scheduling
+# Subsystem Architecture Notes: Logging Daemon, Priority Scheduling & Deadlock Detection/Recovery
 
 **Engineer:** Rafath  
 **Git Identity:** `moidrafath04` ([GitHub Profile](https://github.com/moidrafath04))  
@@ -36,6 +36,8 @@ Rafath was responsible for designing and implementing the asynchronous logging d
 | [`research/rafath_sockets_signals/semaphore_demo.c`](https://github.com/sneharao1811/PBL/blob/main/research/rafath_sockets_signals/semaphore_demo.c) | Phase 1 prototype: POSIX named semaphore synchronization (`sem_open`, `sem_wait`, `sem_post`). |
 | [`research/rafath_sockets_signals/signal_demo.c`](https://github.com/sneharao1811/PBL/blob/main/research/rafath_sockets_signals/signal_demo.c) | Phase 1 prototype: Process signal handling using `sigaction`. |
 | [`research/rafath_sockets_signals/IPC Through Sockets, Signals and Semaphores (with a Comparison of All IPC Methods).pdf`](https://github.com/sneharao1811/PBL/tree/main/research/rafath_sockets_signals) | Comparative research paper evaluating network sockets, POSIX signals, semaphores, and overall IPC trade-offs. |
+| [`deadlock_v4/src/detection.c`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/src/detection.c) | Multi-Instance Deadlock Detection Algorithm: initializes Work/Finish arrays, evaluates outstanding Request matrix against Available resources via iterative matrix reduction, identifies permanently blocked processes unable to acquire their pending requests. |
+| [`deadlock_v4/src/recovery.c`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/src/recovery.c) | Automated Deadlock Recovery Engine: `deadlock_select_victim` cost heuristic (max allocated resources held), `deadlock_recover` implementing 3 strategies — (1) Terminate All deadlocked processes, (2) Selective One-by-One victim termination with iterative re-evaluation, (3) Resource Preemption with Need rollback. |
 
 ---
 
@@ -63,6 +65,7 @@ In [`scheduler_v3/src/scheduler.c`](https://github.com/sneharao1811/PBL/blob/mai
 ## 4. Git Commit History
 
 ```text
+c02101 | 2026-10-20 | feat(deadlock): implement multi-instance deadlock detection and recovery engine
 9607ee1 | 2026-10-12 | feat(scheduler): implement priority scheduling policies
 2ee58ca | 2026-10-09 | feat(logger): implement dedicated logging daemon
 e5d97d8 | 2026-10-01 | research: add sockets, signals, and semaphores documentation

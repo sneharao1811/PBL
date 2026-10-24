@@ -90,6 +90,45 @@ void rag_print_ascii(const deadlock_sys_t *sys, const rag_graph_t *graph) {
     printf("========================================================================\n\n");
 }
 
+void rag_export_dot(const deadlock_sys_t *sys, const rag_graph_t *graph, FILE *fp) {
+    if (!sys || !graph || !fp) return;
+
+    fprintf(fp, "digraph RAG {\n");
+    fprintf(fp, "    rankdir=LR;\n");
+    fprintf(fp, "    node [fontname=\"Helvetica\", fontsize=11];\n");
+    fprintf(fp, "    edge [fontname=\"Helvetica\", fontsize=9];\n\n");
+
+    /* Process nodes (circles) */
+    for (int i = 0; i < sys->num_processes; i++) {
+        if (!sys->process_active[i]) continue;
+        fprintf(fp, "    P%d [label=\"%s\", shape=circle, style=filled, fillcolor=\"#4A90D9\", fontcolor=white];\n",
+                i, sys->process_names[i]);
+    }
+
+    /* Resource nodes (rectangles with instance dots) */
+    for (int j = 0; j < sys->num_resources; j++) {
+        fprintf(fp, "    R%d [label=\"%s\\n(%d instances)\", shape=box, style=filled, fillcolor=\"#E8A838\", fontcolor=white];\n",
+                j, sys->resource_names[j], sys->total_resources[j]);
+    }
+
+    fprintf(fp, "\n");
+
+    /* Edges */
+    for (int e = 0; e < graph->edge_count; e++) {
+        const rag_edge_t *edge = &graph->edges[e];
+        if (edge->type == EDGE_ASSIGNMENT) {
+            fprintf(fp, "    R%d -> P%d [label=\"%d\", color=\"#2ECC71\", penwidth=2.0];\n",
+                    edge->resource_id, edge->process_id, edge->instances);
+        } else {
+            fprintf(fp, "    P%d -> R%d [label=\"%d\", color=\"%s\", style=dashed, penwidth=2.0];\n",
+                    edge->process_id, edge->resource_id, edge->instances,
+                    graph->has_cycle ? "#E74C3C" : "#F39C12");
+        }
+    }
+
+    fprintf(fp, "}\n");
+}
+
 void rag_export_json(const deadlock_sys_t *sys, const rag_graph_t *graph, FILE *fp) {
     if (!sys || !graph || !fp) return;
 

@@ -1,4 +1,4 @@
-# Subsystem Architecture Notes: Core CPU Engine & SJF/SRTF Scheduling
+# Subsystem Architecture Notes: Core CPU Engine, SJF/SRTF Scheduling & Banker's Avoidance Engine
 
 **Engineer:** Siddanth  
 **Git Identity:** `mallyasiddanth` ([GitHub Profile](https://github.com/mallyasiddanth))  
@@ -37,6 +37,7 @@ Siddanth was responsible for designing and implementing the execution engine of 
 | [`research/siddanth_pipes_fifos/fifo_writer.c`](https://github.com/sneharao1811/PBL/blob/main/research/siddanth_pipes_fifos/fifo_writer.c) | Phase 1 prototype: Named FIFO writer process using POSIX `mkfifo`. |
 | [`research/siddanth_pipes_fifos/fifo_reader.c`](https://github.com/sneharao1811/PBL/blob/main/research/siddanth_pipes_fifos/fifo_reader.c) | Phase 1 prototype: Named FIFO reader process ingesting byte streams. |
 | [`research/siddanth_pipes_fifos/IPC(Through Pipes and FIFOs).pdf`](https://github.com/sneharao1811/PBL/tree/main/research/siddanth_pipes_fifos) | Technical research report evaluating byte stream semantics, FIFO buffer thresholds, and pipe descriptor mechanics. |
+| [`deadlock_v4/src/banker.c`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/src/banker.c) | Banker's Deadlock Avoidance Engine: Safety Algorithm (`bankers_check_safety`) computing Work/Finish iteration to discover Safe Sequences; Resource-Request Algorithm (`bankers_request_resource`) validating Need/Available constraints, performing hypothetical state transitions, and denying unsafe allocations; Resource Release handler (`bankers_release_resource`) reclaiming held instances. |
 
 ---
 
@@ -75,6 +76,7 @@ In [`scheduler_v3/src/scheduler.c`](https://github.com/sneharao1811/PBL/blob/mai
 ## 4. Git Commit History
 
 ```text
+7e6c6bf | 2026-10-19 | feat(deadlock): implement Banker's avoidance algorithm and safe sequence generator
 8bf0b7b | 2026-10-11 | feat(scheduler): implement SJF non-preemptive and SRTF preemptive scheduling
 8d818df | 2026-10-08 | feat(core): implement CPU engine with ALU, stack, queue, and async worker
 d630666 | 2026-09-30 | research: add pipes and fifos implementation

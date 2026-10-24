@@ -1,4 +1,4 @@
-# Subsystem Architecture Notes: System Integration, Supervisor & Benchmarking
+# Subsystem Architecture Notes: System Integration, Supervisor, Benchmarking & Deadlock Architecture
 
 **Engineer:** Waqqas  
 **Git Identity:** `Waqqas H` / `w4qq4s` ([GitHub Profile](https://github.com/w4qq4s))  
@@ -40,6 +40,12 @@ Waqqas served as the integration lead and systems architect across the project, 
 | [`scheduler_v3/include/scheduler.h`](https://github.com/sneharao1811/PBL/blob/main/scheduler_v3/include/scheduler.h) | Process control block struct, Gantt interval records, and scheduling algorithm signatures. |
 | [`scheduler_v3/Makefile`](https://github.com/sneharao1811/PBL/blob/main/scheduler_v3/Makefile) | Build script for the CPU scheduling simulation engine. |
 | [`scheduler_v3/src/scheduler.c`](https://github.com/sneharao1811/PBL/blob/main/scheduler_v3/src/scheduler.c) *(Gantt/Runner)* | Gantt chart interval merger (`add_gantt_slice`), ASCII renderer, metric calculations, and automated dataset test runner. |
+| [`deadlock_v4/include/deadlock.h`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/include/deadlock.h) | Central header: `deadlock_sys_t`, `safety_result_t`, `detection_result_t`, RAG edge types, all function prototypes. |
+| [`deadlock_v4/src/deadlock_core.c`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/src/deadlock_core.c) | State initialization, matrix recalculation ($N = M - C$, $A = E - \sum C$), 3 preset workloads, telemetry formatters. |
+| [`deadlock_v4/deadlock_sim.py`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/deadlock_sim.py) | Complete standalone Python reimplementation with algorithm parity for cross-platform CLI execution. |
+| [`deadlock_v4/gui/server.py`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/gui/server.py) | Zero-dependency HTTP server with automatic browser launch for GUI delivery. |
+| [`deadlock_v4/Makefile`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/Makefile) | Build script for the native C deadlock CLI binary. |
+| [`docs/DEADLOCK_ARCHITECTURE.md`](https://github.com/sneharao1811/PBL/blob/main/docs/DEADLOCK_ARCHITECTURE.md) | Complete architectural specification with mermaid diagrams, mathematical models, and GUI architecture. |
 | [`research/waqqas_shared_memory/shm_demo.c`](https://github.com/sneharao1811/PBL/blob/main/research/waqqas_shared_memory/shm_demo.c) | Working prototype demonstrating POSIX shared memory creation, truncation, mapping, and synchronization. |
 | [`research/waqqas_shared_memory/Inter Process Communication (IPC) - Fundamentals and Shared Memory.pdf`](https://github.com/sneharao1811/PBL/tree/main/research/waqqas_shared_memory) | Research paper on shared memory architectures, kernel virtual memory mapping, and cache coherence. |
 
@@ -63,6 +69,10 @@ In the baseline simulator ([`baseline_v1/simulator_v1.c`](https://github.com/sne
 ## 4. Git Commit History
 
 ```text
+c517012 | 2026-10-23 | docs: update laboratory report and student deliverables for deadlock simulation
+f388fb7 | 2026-10-23 | feat(deadlock): integrate build orchestration, standalone runner, and test suite
+11a7242 | 2026-10-18 | feat(deadlock): initialize state models, headers, and core matrix math
+9211006 | 2026-10-14 | docs: student-specific documentation added
 6246213 | 2026-10-14 | docs: add SOE to readme.md
 25c711d | 2026-10-12 | perf: add synthetic workload generator and benchmark comparison suite
 411290c | 2026-10-12 | feat(scheduler): add ASCII Gantt chart renderer, test suites, and comparison table

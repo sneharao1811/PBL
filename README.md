@@ -226,6 +226,8 @@ Both implementations were evaluated against an automated workload of **1,000 ins
 
 > *For detailed trade-off justifications and benchmark methodology, see [docs/IPC_COMPARISON.md](file:///c:/Users/innoc/Desktop/Aloy/temp2/PBL/docs/IPC_COMPARISON.md) and [docs/BENCHMARKS.md](file:///c:/Users/innoc/Desktop/Aloy/temp2/PBL/docs/BENCHMARKS.md).*
 
+> *For detailed deadlock system architecture, data models, algorithmic flowcharts, and GUI specifications, see [docs/DEADLOCK_ARCHITECTURE.md](file:///c:/Users/innoc/Desktop/Aloy/temp2/PBL/docs/DEADLOCK_ARCHITECTURE.md).*
+
 ---
 
 ## 3. Week 4 — Interactive Deadlock Simulation System (with GUI)
@@ -361,7 +363,8 @@ PBL/
 │   └── results.txt                    # Benchmark output logs
 │
 └── docs/                              # Detailed engineering specifications
-    ├── ARCHITECTURE.md                # System design & protocol specifications
+    ├── ARCHITECTURE.md                # Multi-process system design & protocol specs
+    ├── DEADLOCK_ARCHITECTURE.md        # Deadlock simulation system architecture & algorithm flows
     ├── IPC_COMPARISON.md              # In-depth analysis of all 4 IPC mechanisms
     └── BENCHMARKS.md                  # Detailed performance analysis
 ```
