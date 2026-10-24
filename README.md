@@ -179,7 +179,7 @@ graph TD
 
 ### Binary Packet Layout & Protocol Frame
 
-Defined in [src_v2/include/protocol.h](file:///c:/Users/innoc/Desktop/Aloy/temp2/PBL/src_v2/include/protocol.h):
+Defined in [`src_v2/include/protocol.h`](https://github.com/sneharao1811/PBL/blob/main/src_v2/include/protocol.h):
 
 ```text
 +-------------------+--------------------+--------------------+-----------------------+
@@ -224,9 +224,9 @@ Both implementations were evaluated against an automated workload of **1,000 ins
 | **Logging Model** | Synchronous file I/O (`fopen`/`fclose` on every op) | Asynchronous thread ring-buffer + Daemon | CPU non-blocking |
 | **Fault Isolation** | None (Shared address space) | Memory isolated (3 distinct PIDs) | High resilience |
 
-> *For detailed trade-off justifications and benchmark methodology, see [docs/IPC_COMPARISON.md](file:///c:/Users/innoc/Desktop/Aloy/temp2/PBL/docs/IPC_COMPARISON.md) and [docs/BENCHMARKS.md](file:///c:/Users/innoc/Desktop/Aloy/temp2/PBL/docs/BENCHMARKS.md).*
+> *For detailed trade-off justifications and benchmark methodology, see [`docs/IPC_COMPARISON.md`](https://github.com/sneharao1811/PBL/blob/main/docs/IPC_COMPARISON.md) and [`docs/BENCHMARKS.md`](https://github.com/sneharao1811/PBL/blob/main/docs/BENCHMARKS.md).*
 
-> *For detailed deadlock system architecture, data models, algorithmic flowcharts, and GUI specifications, see [docs/DEADLOCK_ARCHITECTURE.md](file:///c:/Users/innoc/Desktop/Aloy/temp2/PBL/docs/DEADLOCK_ARCHITECTURE.md).*
+> *For detailed deadlock system architecture, data models, algorithmic flowcharts, and GUI specifications, see [`docs/DEADLOCK_ARCHITECTURE.md`](https://github.com/sneharao1811/PBL/blob/main/docs/DEADLOCK_ARCHITECTURE.md).*
 
 ---
 

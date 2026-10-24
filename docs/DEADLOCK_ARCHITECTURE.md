@@ -243,16 +243,16 @@ graph LR
 
 | Module | File(s) | Primary Author | Contribution |
 |:---|:---|:---:|:---|
-| Data Models & State Engine | `deadlock.h`, `deadlock_core.c` | Waqqas | Struct definitions, matrix math, presets, telemetry formatters, headroom validation |
-| Banker's Avoidance Engine | `banker.c` | Siddanth | Safety algorithm, resource-request validator, resource release handler |
-| Detection Algorithm | `detection.c` | Rafath | Multi-instance request-matrix reduction, deadlocked PID enumeration |
-| Recovery Engine | `recovery.c` | Rafath | Victim selection heuristic, 3 recovery strategies, resource reclamation |
-| 12-Item CLI Shell | `deadlock_cli.c` | Sneha | Full interactive menu loop, input parsing, formatted output |
-| RAG Visualizer | `rag.c` | Sneha | Graph builder, ASCII/JSON/DOT export, cycle detection delegation |
-| Interactive GUI | `gui/*` | Sneha | Canvas rendering, live matrix binding, stepper, recovery controls |
-| Python Runner | `deadlock_sim.py` | Waqqas | Algorithm-parity standalone for cross-platform execution |
-| Build System | `Makefile`, `deadlock_v4/Makefile` | Waqqas | Compilation targets, GUI launcher, test harness |
-| HTTP Server | `gui/server.py` | Waqqas | Zero-dependency local server with auto-browser launch |
+| Data Models & State Engine | [`deadlock_v4/include/deadlock.h`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/include/deadlock.h), [`deadlock_v4/src/deadlock_core.c`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/src/deadlock_core.c) | Waqqas | Struct definitions, matrix math, presets, telemetry formatters, headroom validation |
+| Banker's Avoidance Engine | [`deadlock_v4/src/banker.c`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/src/banker.c) | Siddanth | Safety algorithm, resource-request validator, resource release handler |
+| Detection Algorithm | [`deadlock_v4/src/detection.c`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/src/detection.c) | Rafath | Multi-instance request-matrix reduction, deadlocked PID enumeration |
+| Recovery Engine | [`deadlock_v4/src/recovery.c`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/src/recovery.c) | Rafath | Victim selection heuristic, 3 recovery strategies, resource reclamation |
+| 12-Item CLI Shell | [`deadlock_v4/src/deadlock_cli.c`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/src/deadlock_cli.c) | Sneha | Full interactive menu loop, input parsing, formatted output |
+| RAG Visualizer | [`deadlock_v4/src/rag.c`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/src/rag.c) | Sneha | Graph builder, ASCII/JSON/DOT export, cycle detection delegation |
+| Interactive GUI | [`deadlock_v4/gui/`](https://github.com/sneharao1811/PBL/tree/main/deadlock_v4/gui/) | Sneha | Canvas rendering, live matrix binding, stepper, recovery controls |
+| Python Runner | [`deadlock_v4/deadlock_sim.py`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/deadlock_sim.py) | Waqqas | Algorithm-parity standalone for cross-platform execution |
+| Build System | [`Makefile`](https://github.com/sneharao1811/PBL/blob/main/Makefile), [`deadlock_v4/Makefile`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/Makefile) | Waqqas | Compilation targets, GUI launcher, test harness |
+| HTTP Server | [`deadlock_v4/gui/server.py`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/gui/server.py) | Waqqas | Zero-dependency local server with auto-browser launch |
 
 ---
 
