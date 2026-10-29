@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f3f5f7">
+    <meta name="description" content="Interactive FIFO, LRU, and Optimal page replacement simulator with step-by-step frame states and comparison.">
+    <title>Page Replacement Simulator | Team 8 PBL</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="app-header">
+        <a class="brand" href="#top" aria-label="Page Replacement Simulator home">
+            <span class="brand-mark" aria-hidden="true">PR</span>
+            <span class="brand-copy">
+                <strong>Page Replacement Simulator</strong>
+                <span>Operating Systems · Memory management</span>
+            </span>
+        </a>
+        <span class="header-tag">Team 8 · PBL</span>
+    </header>
+
+    <main id="top" class="page-shell">
+        <section class="intro" aria-labelledby="page-title">
+            <p class="eyebrow">Virtual memory lab</p>
+            <h1 id="page-title">Compare page replacement strategies</h1>
+            <p>Follow each page request through physical memory, then compare how FIFO, LRU, and Optimal handle the same workload.</p>
+        </section>
+
+        <section class="workspace" aria-label="Page replacement simulator">
+            <form id="simulationForm" class="setup-card" novalidate>
+                <div class="section-heading">
+                    <div>
+                        <p class="eyebrow">Simulation setup</p>
+                        <h2>Define the workload</h2>
+                    </div>
+                    <button id="loadSampleBtn" class="text-button" type="button">Load sample</button>
+                </div>
+
+                <div class="form-grid">
+                    <div class="field field-reference">
+                        <label for="referenceInput">Page-reference string</label>
+                        <textarea id="referenceInput" name="references" rows="3" spellcheck="false" aria-describedby="referenceHelp" required>7 0 1 2 0 3 0 4 2 3</textarea>
+                        <span id="referenceHelp" class="field-help">Enter non-negative page numbers separated by spaces or commas. Up to 500 references.</span>
+                    </div>
+
+                    <div class="field">
+                        <label for="frameCount">Physical memory frames</label>
+                        <input id="frameCount" name="frames" type="number" min="1" max="64" step="1" value="3" required>
+                        <span class="field-help">Choose between 1 and 64 frames.</span>
+                    </div>
+
+                    <div class="field">
+                        <label for="algorithmSelect">Algorithm</label>
+                        <select id="algorithmSelect" name="algorithm">
+                            <option value="compare">Compare all</option>
+                            <option value="FIFO">FIFO</option>
+                            <option value="LRU">LRU</option>
+                            <option value="Optimal">Optimal</option>
+                        </select>
+                        <span class="field-help">Comparison uses the same input for each algorithm.</span>
+                    </div>
+                </div>
+
+                <div class="form-footer">
+                    <p id="inputError" class="input-error" role="alert" aria-live="polite"></p>
+                    <button class="run-button" type="submit">Run simulation</button>
+                </div>
+            </form>
+
+            <section id="resultsPanel" class="results" aria-labelledby="resultsTitle" hidden>
+                <div class="results-heading">
+                    <div>
+                        <p class="eyebrow">Simulation results</p>
+                        <h2 id="resultsTitle">Performance summary</h2>
+                    </div>
+                    <span id="workloadSummary" class="workload-summary"></span>
+                </div>
+
+                <div class="summary-card">
+                    <div class="table-scroll">
+                        <table class="summary-table">
+                            <caption class="visually-hidden">Page replacement performance by algorithm</caption>
+                            <thead>
+                                <tr>
+                                    <th scope="col">Algorithm</th>
+                                    <th scope="col">Hits</th>
+                                    <th scope="col">Faults</th>
+                                    <th scope="col">Hit ratio</th>
+                                    <th scope="col">Fault ratio</th>
+                                </tr>
+                            </thead>
+                            <tbody id="summaryBody"></tbody>
+                        </table>
+                    </div>
+                    <p id="comparisonNote" class="comparison-note"></p>
+                </div>
+
+                <section class="fault-chart-card" aria-labelledby="chartTitle">
+                    <div class="subsection-heading">
+                        <div>
+                            <h3 id="chartTitle">Page faults by algorithm</h3>
+                            <p>Fewer faults means fewer page loads from secondary storage.</p>
+                        </div>
+                    </div>
+                    <div id="faultChart" class="fault-chart" role="img" aria-label="Page fault comparison"></div>
+                </section>
+
+                <section class="trace-card" aria-labelledby="traceTitle">
+                    <div class="trace-heading">
+                        <div>
+                            <p class="eyebrow">Reference trace</p>
+                            <h3 id="traceTitle">Frame contents after each request</h3>
+                        </div>
+                        <div class="trace-select-wrap">
+                            <label for="traceAlgorithm">Show algorithm</label>
+                            <select id="traceAlgorithm"></select>
+                        </div>
+                    </div>
+                    <p class="trace-help">Each row shows memory after the request. A dash marks an empty frame.</p>
+                    <div class="table-scroll">
+                        <table class="trace-table">
+                            <caption class="visually-hidden">Frame state after every page reference</caption>
+                            <thead id="traceHead"></thead>
+                            <tbody id="traceBody"></tbody>
+                        </table>
+                    </div>
+                    <div class="legend" aria-label="Trace status legend">
+                        <span><i class="legend-swatch hit-swatch"></i>Hit: page was already in memory</span>
+                        <span><i class="legend-swatch fault-swatch"></i>Fault: page loaded into a frame</span>
+                    </div>
+                </section>
+            </section>
+
+            <footer class="page-footer">
+                <span>FIFO replaces the oldest loaded page.</span>
+                <span>LRU replaces the least recently used page.</span>
+                <span>Optimal replaces the page whose next use is farthest away.</span>
+            </footer>
+        </section>
+    </main>
+    <script src="app.js"></script>
+</body>
+</html>
