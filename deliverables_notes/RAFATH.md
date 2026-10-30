@@ -2,13 +2,13 @@
 
 **Engineer:** Rafath  
 **Git Identity:** `moidrafath04` ([GitHub Profile](https://github.com/moidrafath04))  
-**Subsystems Owned:** Dedicated Logging Daemon Process, Log Stream Management, Timestamp Formatting, Priority Scheduling Algorithms (Preemptive & Non-Preemptive), Multi-Instance Deadlock Detection Algorithm & Recovery Engine
+**Subsystems Owned:** Dedicated Logging Daemon Process, Log Stream Management, Timestamp Formatting, Priority Scheduling Algorithms (Preemptive & Non-Preemptive), Multi-Instance Deadlock Detection Algorithm & Recovery Engine, Least Recently Used (LRU) Page Replacement Algorithm
 
 ---
 
 ## 1. Overview & Responsibilities
 
-Rafath was responsible for designing and implementing the asynchronous logging daemon for the multi-process simulator, managing disk stream persistence, formatting structured event telemetry, developing the priority-based process scheduling algorithms in the CPU scheduling suite, and authoring the multi-instance Deadlock Detection Algorithm and automated Recovery subsystem for the Week 4 Deadlock Simulation System.
+Rafath was responsible for designing and implementing the asynchronous logging daemon for the multi-process simulator, managing disk stream persistence, formatting structured event telemetry, developing the priority-based process scheduling algorithms in the CPU scheduling suite, authoring the multi-instance Deadlock Detection Algorithm and automated Recovery subsystem for the Week 4 Deadlock Simulation System, and engineering the Least Recently Used (LRU) page replacement algorithm with per-frame chronological timestamping.
 
 ### Subsystem Deliverables:
 1. **Dedicated Logging Daemon (`logger_proc`):** Authored [`src_v2/logger/logger_main.c`](https://github.com/sneharao1811/PBL/blob/main/src_v2/logger/logger_main.c), implementing a standalone daemon process continuously listening on `/pbl8_to_logger`.
@@ -20,7 +20,8 @@ Rafath was responsible for designing and implementing the asynchronous logging d
 7. **Preemptive Priority Scheduling Engine:** Implemented `run_priority_preemptive` in [`scheduler_v3/src/scheduler.c`](https://github.com/sneharao1811/PBL/blob/main/scheduler_v3/src/scheduler.c).
 8. **Multi-Instance Deadlock Detection Algorithm:** Authored [`deadlock_v4/src/detection.c`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/src/detection.c), identifying permanently blocked processes by evaluating outstanding requests against available instances via matrix reduction.
 9. **Deadlock Recovery Engine:** Authored [`deadlock_v4/src/recovery.c`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/src/recovery.c), implementing cost-effective victim selection, selective process termination, and resource preemption with state rollback.
-10. **Sockets, Signals & Semaphores Research:** Prototyped TCP socket servers/clients, POSIX semaphores, and signal handlers in [`research/rafath_sockets_signals/tcp_server.c`](https://github.com/sneharao1811/PBL/blob/main/research/rafath_sockets_signals/tcp_server.c), `tcp_client.c`, `semaphore_demo.c`, and `signal_demo.c`, authoring the comparative research paper `IPC Through Sockets, Signals and Semaphores (with a Comparison of All IPC Methods).pdf`.
+10. **Least Recently Used (LRU) Page Replacement Engine:** Authored [`page_replacement/src/lru.c`](https://github.com/sneharao1811/PBL/blob/main/page_replacement/src/lru.c), implementing per-frame chronological reference timestamping, victim selection based on oldest last-referenced time, and demonstrating immunity to Belady's Anomaly via the stack property.
+11. **Sockets, Signals & Semaphores Research:** Prototyped TCP socket servers/clients, POSIX semaphores, and signal handlers in [`research/rafath_sockets_signals/tcp_server.c`](https://github.com/sneharao1811/PBL/blob/main/research/rafath_sockets_signals/tcp_server.c), `tcp_client.c`, `semaphore_demo.c`, and `signal_demo.c`, authoring the comparative research paper `IPC Through Sockets, Signals and Semaphores (with a Comparison of All IPC Methods).pdf`.
 
 ---
 
@@ -31,13 +32,14 @@ Rafath was responsible for designing and implementing the asynchronous logging d
 | [`src_v2/logger/logger_main.c`](https://github.com/sneharao1811/PBL/blob/main/src_v2/logger/logger_main.c) | Dedicated logging daemon: opens `/pbl8_to_logger`, processes structured log packets, formats timestamps, streams to `simulator.log`, and handles shutdown. |
 | [`scheduler_v3/src/scheduler.c`](https://github.com/sneharao1811/PBL/blob/main/scheduler_v3/src/scheduler.c) *(Lines 220–267)* | Non-Preemptive Priority Scheduling (`run_priority_non_preemptive`) implementation. |
 | [`scheduler_v3/src/scheduler.c`](https://github.com/sneharao1811/PBL/blob/main/scheduler_v3/src/scheduler.c) *(Lines 269–322)* | Preemptive Priority Scheduling (`run_priority_preemptive`) implementation. |
+| [`deadlock_v4/src/detection.c`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/src/detection.c) | Multi-Instance Deadlock Detection Algorithm: initializes Work/Finish arrays, evaluates outstanding Request matrix against Available resources via iterative matrix reduction, identifies permanently blocked processes unable to acquire their pending requests. |
+| [`deadlock_v4/src/recovery.c`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/src/recovery.c) | Automated Deadlock Recovery Engine: `deadlock_select_victim` cost heuristic (max allocated resources held), `deadlock_recover` implementing 3 strategies — (1) Terminate All deadlocked processes, (2) Selective One-by-One victim termination with iterative re-evaluation, (3) Resource Preemption with Need rollback. |
+| [`page_replacement/src/lru.c`](https://github.com/sneharao1811/PBL/blob/main/page_replacement/src/lru.c) | Least Recently Used page replacement simulation: chronological reference timestamping, temporal locality refresh on hits, minimum timestamp victim selection. |
 | [`research/rafath_sockets_signals/tcp_server.c`](https://github.com/sneharao1811/PBL/blob/main/research/rafath_sockets_signals/tcp_server.c) | Phase 1 prototype: Concurrent TCP server listening on network sockets. |
 | [`research/rafath_sockets_signals/tcp_client.c`](https://github.com/sneharao1811/PBL/blob/main/research/rafath_sockets_signals/tcp_client.c) | Phase 1 prototype: TCP client transmitting data over AF_INET stream sockets. |
 | [`research/rafath_sockets_signals/semaphore_demo.c`](https://github.com/sneharao1811/PBL/blob/main/research/rafath_sockets_signals/semaphore_demo.c) | Phase 1 prototype: POSIX named semaphore synchronization (`sem_open`, `sem_wait`, `sem_post`). |
 | [`research/rafath_sockets_signals/signal_demo.c`](https://github.com/sneharao1811/PBL/blob/main/research/rafath_sockets_signals/signal_demo.c) | Phase 1 prototype: Process signal handling using `sigaction`. |
 | [`research/rafath_sockets_signals/IPC Through Sockets, Signals and Semaphores (with a Comparison of All IPC Methods).pdf`](https://github.com/sneharao1811/PBL/tree/main/research/rafath_sockets_signals) | Comparative research paper evaluating network sockets, POSIX signals, semaphores, and overall IPC trade-offs. |
-| [`deadlock_v4/src/detection.c`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/src/detection.c) | Multi-Instance Deadlock Detection Algorithm: initializes Work/Finish arrays, evaluates outstanding Request matrix against Available resources via iterative matrix reduction, identifies permanently blocked processes unable to acquire their pending requests. |
-| [`deadlock_v4/src/recovery.c`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/src/recovery.c) | Automated Deadlock Recovery Engine: `deadlock_select_victim` cost heuristic (max allocated resources held), `deadlock_recover` implementing 3 strategies — (1) Terminate All deadlocked processes, (2) Selective One-by-One victim termination with iterative re-evaluation, (3) Resource Preemption with Need rollback. |
 
 ---
 

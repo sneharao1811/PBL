@@ -2,13 +2,13 @@
 
 **Engineer:** Waqqas  
 **Git Identity:** `Waqqas H` / `w4qq4s` ([GitHub Profile](https://github.com/w4qq4s))  
-**Subsystems Owned:** Process Lifecycle Supervisor, POSIX IPC Protocol Definition, Baseline Monolithic Simulator, Automated Benchmarking Suite, Scheduler Visualization & Test Engine, Deadlock System Architecture & Core State Models
+**Subsystems Owned:** Process Lifecycle Supervisor, POSIX IPC Protocol Definition, Baseline Monolithic Simulator, Automated Benchmarking Suite, Scheduler Visualization & Test Engine, Deadlock System Architecture & Core State Models, Page Replacement Core State Models, Parser & Build Orchestration
 
 ---
 
 ## 1. Overview & Responsibilities
 
-Waqqas served as the integration lead and systems architect across the project, responsible for designing the IPC protocol contracts, supervising process lifecycles, establishing the build automation framework, engineering empirical performance benchmarks, developing visualization tooling for the scheduling engine, and architecting the data structures and core state engine for the Week 4 Deadlock Simulation System.
+Waqqas served as the integration lead and systems architect across the project, responsible for designing the IPC protocol contracts, supervising process lifecycles, establishing the build automation framework, engineering empirical performance benchmarks, developing visualization tooling for the scheduling engine, architecting the data structures and core state engine for the Week 4 Deadlock Simulation System, and designing the core state models, reference parser, metrics framework, and test harness for the Virtual Memory Page Replacement Simulator.
 
 ### Subsystem Deliverables:
 1. **IPC Protocol Specification & Framing:** Authored [`src_v2/include/protocol.h`](https://github.com/sneharao1811/PBL/blob/main/src_v2/include/protocol.h), defining binary packet layouts (`ipc_req_t`, `ipc_resp_t`, `ipc_log_t`), operation codes, and POSIX queue endpoints.
@@ -17,7 +17,9 @@ Waqqas served as the integration lead and systems architect across the project, 
 4. **Benchmarking Harness & Analytics:** Designed [`benchmarks/generate_workload.py`](https://github.com/sneharao1811/PBL/blob/main/benchmarks/generate_workload.py) and [`benchmarks/run_benchmark.sh`](https://github.com/sneharao1811/PBL/blob/main/benchmarks/run_benchmark.sh), measuring wall-clock time, ops/sec throughput, and per-operation latency across 1,000 and 5,000 operation workloads.
 5. **Scheduler Visualization & Test Suite:** Authored the ASCII Gantt chart renderer, process metrics summarization (`finalize_metrics`), and automated test dataset runner in [`scheduler_v3/src/scheduler.c`](https://github.com/sneharao1811/PBL/blob/main/scheduler_v3/src/scheduler.c).
 6. **Deadlock State Models & Core Math Engine:** Authored [`deadlock_v4/include/deadlock.h`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/include/deadlock.h) and [`deadlock_v4/src/deadlock_core.c`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/src/deadlock_core.c), defining vectors and matrices ($E, A, C, M, N, Q$), need recalculation, resource headroom validation, benchmark presets, and telemetry formatters.
-7. **Shared Memory IPC Research:** Researched POSIX Shared Memory (`shm_open`, `mmap`, `shm_unlink`) in [`research/waqqas_shared_memory/shm_demo.c`](https://github.com/sneharao1811/PBL/blob/main/research/waqqas_shared_memory/shm_demo.c) and authored the technical paper `Inter Process Communication (IPC) - Fundamentals and Shared Memory.pdf`.
+7. **Page Replacement Core Engine & Models:** Authored [`page_replacement/include/page_replacement.h`](https://github.com/sneharao1811/PBL/blob/main/page_replacement/include/page_replacement.h) and [`page_replacement/src/page_core.c`](https://github.com/sneharao1811/PBL/blob/main/page_replacement/src/page_core.c), defining `page_step_t`, `page_result_t`, reference token parsing, hit/fault metric calculations, and trace output formatters.
+8. **Page Replacement Test Harness & Build Orchestration:** Authored [`page_replacement/page_sim.py`](https://github.com/sneharao1811/PBL/blob/main/page_replacement/page_sim.py) with automated verification tests, along with [`page_replacement/Makefile`](https://github.com/sneharao1811/PBL/blob/main/page_replacement/Makefile) and root [`Makefile`](https://github.com/sneharao1811/PBL/blob/main/Makefile) targets.
+9. **Shared Memory IPC Research:** Researched POSIX Shared Memory (`shm_open`, `mmap`, `shm_unlink`) in [`research/waqqas_shared_memory/shm_demo.c`](https://github.com/sneharao1811/PBL/blob/main/research/waqqas_shared_memory/shm_demo.c) and authored the technical paper `Inter Process Communication (IPC) - Fundamentals and Shared Memory.pdf`.
 
 ---
 
@@ -28,7 +30,7 @@ Waqqas served as the integration lead and systems architect across the project, 
 | [`src_v2/launcher/supervisor.c`](https://github.com/sneharao1811/PBL/blob/main/src_v2/launcher/supervisor.c) | Master process supervisor: allocates queues, spawns `logger_proc`, `core_proc`, `ui_proc`, coordinates teardown, and unlinks queues. |
 | [`src_v2/include/protocol.h`](https://github.com/sneharao1811/PBL/blob/main/src_v2/include/protocol.h) | Shared protocol contracts: packet structures, queue paths, opcodes (`CMD_PUSH`, `CMD_POP`, `CMD_ADD`, `CMD_STATUS`, `CMD_EXIT`), and status codes. |
 | [`src_v2/Makefile`](https://github.com/sneharao1811/PBL/blob/main/src_v2/Makefile) | Subsystem Makefile with compilation rules for all three discrete binaries and the supervisor launcher. |
-| [`Makefile`](https://github.com/sneharao1811/PBL/blob/main/Makefile) | Root Makefile orchestrating `v1`, `v2`, `scheduler`, `test`, `benchmark`, and `clean` targets. |
+| [`Makefile`](https://github.com/sneharao1811/PBL/blob/main/Makefile) | Root Makefile orchestrating `v1`, `v2`, `scheduler`, `deadlock`, `page-replacement`, `test`, `benchmark`, and `clean` targets. |
 | [`baseline_v1/simulator_v1.c`](https://github.com/sneharao1811/PBL/blob/main/baseline_v1/simulator_v1.c) | Single-process baseline simulator used to quantify multi-process speedup. |
 | [`baseline_v1/Makefile`](https://github.com/sneharao1811/PBL/blob/main/baseline_v1/Makefile) | Makefile for compiling the baseline monolithic executable. |
 | [`benchmarks/generate_workload.py`](https://github.com/sneharao1811/PBL/blob/main/benchmarks/generate_workload.py) | Python generator creating balanced sequences of CPU instructions for stress testing. |
@@ -46,6 +48,10 @@ Waqqas served as the integration lead and systems architect across the project, 
 | [`deadlock_v4/gui/server.py`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/gui/server.py) | Zero-dependency HTTP server with automatic browser launch for GUI delivery. |
 | [`deadlock_v4/Makefile`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/Makefile) | Build script for the native C deadlock CLI binary. |
 | [`docs/DEADLOCK_ARCHITECTURE.md`](https://github.com/sneharao1811/PBL/blob/main/docs/DEADLOCK_ARCHITECTURE.md) | Complete architectural specification with mermaid diagrams, mathematical models, and GUI architecture. |
+| [`page_replacement/include/page_replacement.h`](https://github.com/sneharao1811/PBL/blob/main/page_replacement/include/page_replacement.h) | Page replacement central header: `page_alg_t`, `page_step_t`, `page_result_t`, `ref_string_t`, function prototypes. |
+| [`page_replacement/src/page_core.c`](https://github.com/sneharao1811/PBL/blob/main/page_replacement/src/page_core.c) | Reference token parser, frame array management, metric computations, and ASCII trace/comparison table printers. |
+| [`page_replacement/page_sim.py`](https://github.com/sneharao1811/PBL/blob/main/page_replacement/page_sim.py) | Standalone Python simulation runner with automated verification suite (parity tests, Belady's anomaly, LRU stack property). |
+| [`page_replacement/Makefile`](https://github.com/sneharao1811/PBL/blob/main/page_replacement/Makefile) | Build script compiling the native `bin/page_replacement_cli` executable. |
 | [`research/waqqas_shared_memory/shm_demo.c`](https://github.com/sneharao1811/PBL/blob/main/research/waqqas_shared_memory/shm_demo.c) | Working prototype demonstrating POSIX shared memory creation, truncation, mapping, and synchronization. |
 | [`research/waqqas_shared_memory/Inter Process Communication (IPC) - Fundamentals and Shared Memory.pdf`](https://github.com/sneharao1811/PBL/tree/main/research/waqqas_shared_memory) | Research paper on shared memory architectures, kernel virtual memory mapping, and cache coherence. |
 

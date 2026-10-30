@@ -2,13 +2,13 @@
 
 **Engineer:** Siddanth  
 **Git Identity:** `mallyasiddanth` ([GitHub Profile](https://github.com/mallyasiddanth))  
-**Subsystems Owned:** CPU Core Engine Process, Hardware Subsystems (Stack, Memory, ALU, Queue), Multithreaded Asynchronous Logging Worker, Shortest Job First (SJF) & Shortest Remaining Time First (SRTF) Scheduling Algorithms, Deadlock Avoidance Engine & Banker's Safety Algorithm
+**Subsystems Owned:** CPU Core Engine Process, Hardware Subsystems (Stack, Memory, ALU, Queue), Multithreaded Asynchronous Logging Worker, Shortest Job First (SJF) & Shortest Remaining Time First (SRTF) Scheduling Algorithms, Deadlock Avoidance Engine & Banker's Safety Algorithm, FIFO & Optimal Page Replacement Algorithms
 
 ---
 
 ## 1. Overview & Responsibilities
 
-Siddanth was responsible for designing and implementing the execution engine of the multi-process CPU simulator—managing hardware simulation state, memory, stack pointer mechanics, instruction queueing, arithmetic operations, and internal multithreaded concurrency. In the scheduling simulator, he authored the greedy and preemptive burst-optimal scheduling algorithms. For the Deadlock Simulation System, he engineered the Deadlock Avoidance engine using Banker's Algorithm, Safe Sequence evaluation, and dynamic Resource-Request validation.
+Siddanth was responsible for designing and implementing the execution engine of the multi-process CPU simulator—managing hardware simulation state, memory, stack pointer mechanics, instruction queueing, arithmetic operations, and internal multithreaded concurrency. In the scheduling simulator, he authored the greedy and preemptive burst-optimal scheduling algorithms. For the Deadlock Simulation System, he engineered the Deadlock Avoidance engine using Banker's Algorithm, Safe Sequence evaluation, and dynamic Resource-Request validation. For the Page Replacement System, he engineered the FIFO replacement engine and Belady's Optimal (MIN) clairvoyant replacement algorithm.
 
 ### Subsystem Deliverables:
 1. **Core CPU Engine Process (`core_proc`):** Authored [`src_v2/core/core_main.c`](https://github.com/sneharao1811/PBL/blob/main/src_v2/core/core_main.c), implementing CPU state management, IPC instruction receipt, and execution dispatching.
@@ -22,7 +22,9 @@ Siddanth was responsible for designing and implementing the execution engine of 
 5. **SJF Non-Preemptive Scheduling Engine:** Implemented `run_sjf_non_preemptive` in [`scheduler_v3/src/scheduler.c`](https://github.com/sneharao1811/PBL/blob/main/scheduler_v3/src/scheduler.c).
 6. **SRTF Preemptive Scheduling Engine:** Implemented `run_srtf_preemptive` in [`scheduler_v3/src/scheduler.c`](https://github.com/sneharao1811/PBL/blob/main/scheduler_v3/src/scheduler.c), supporting cycle-by-cycle preemption.
 7. **Banker's Deadlock Avoidance Engine:** Authored [`deadlock_v4/src/banker.c`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/src/banker.c), implementing the Banker's Safety Algorithm to discover Safe Sequences $\langle P_i \dots \rangle$ and the Resource-Request algorithm to test hypothetical state transitions and avoid unsafe operations.
-8. **Pipes and FIFOs Research:** Prototyped anonymous pipes and named FIFOs in [`research/siddanth_pipes_fifos/pipe_demo.c`](https://github.com/sneharao1811/PBL/blob/main/research/siddanth_pipes_fifos/pipe_demo.c), `fifo_writer.c`, and `fifo_reader.c`, authoring the technical report `IPC(Through Pipes and FIFOs).pdf`.
+8. **First-In First-Out (FIFO) Page Replacement Engine:** Authored [`page_replacement/src/fifo.c`](https://github.com/sneharao1811/PBL/blob/main/page_replacement/src/fifo.c), implementing circular pointer replacement mechanics and frame tracking across arbitrary reference streams.
+9. **Belady's Optimal (MIN) Page Replacement Engine:** Authored [`page_replacement/src/optimal.c`](https://github.com/sneharao1811/PBL/blob/main/page_replacement/src/optimal.c), implementing future reference lookahead scanning, never-again referenced victim prioritization, and the theoretical lower bound on page faults.
+10. **Pipes and FIFOs Research:** Prototyped anonymous pipes and named FIFOs in [`research/siddanth_pipes_fifos/pipe_demo.c`](https://github.com/sneharao1811/PBL/blob/main/research/siddanth_pipes_fifos/pipe_demo.c), `fifo_writer.c`, and `fifo_reader.c`, authoring the technical report `IPC(Through Pipes and FIFOs).pdf`.
 
 ---
 
@@ -33,11 +35,13 @@ Siddanth was responsible for designing and implementing the execution engine of 
 | [`src_v2/core/core_main.c`](https://github.com/sneharao1811/PBL/blob/main/src_v2/core/core_main.c) | Complete Core Engine: IPC queue listeners, instruction queueing, stack/memory/ALU execution, asynchronous pthread logging worker, and response dispatch. |
 | [`scheduler_v3/src/scheduler.c`](https://github.com/sneharao1811/PBL/blob/main/scheduler_v3/src/scheduler.c) *(Lines 100–145)* | Shortest Job First Non-Preemptive (`run_sjf_non_preemptive`) scheduling algorithm implementation. |
 | [`scheduler_v3/src/scheduler.c`](https://github.com/sneharao1811/PBL/blob/main/scheduler_v3/src/scheduler.c) *(Lines 147–218)* | Shortest Remaining Time First Preemptive (`run_srtf_preemptive`) scheduling algorithm implementation. |
+| [`deadlock_v4/src/banker.c`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/src/banker.c) | Banker's Deadlock Avoidance Engine: Safety Algorithm (`bankers_check_safety`) computing Work/Finish iteration to discover Safe Sequences; Resource-Request Algorithm (`bankers_request_resource`) validating Need/Available constraints, performing hypothetical state transitions, and denying unsafe allocations; Resource Release handler (`bankers_release_resource`) reclaiming held instances. |
+| [`page_replacement/src/fifo.c`](https://github.com/sneharao1811/PBL/blob/main/page_replacement/src/fifo.c) | First-In First-Out page replacement simulation: circular replacement pointer, chronological queue ordering, frame status tracking. |
+| [`page_replacement/src/optimal.c`](https://github.com/sneharao1811/PBL/blob/main/page_replacement/src/optimal.c) | Belady's Optimal (MIN) clairvoyant replacement simulation: future stream scanner, farthest-next-use victim selection, lowest frame tie-breaking. |
 | [`research/siddanth_pipes_fifos/pipe_demo.c`](https://github.com/sneharao1811/PBL/blob/main/research/siddanth_pipes_fifos/pipe_demo.c) | Phase 1 prototype: Anonymous pipe communication across parent and child processes. |
 | [`research/siddanth_pipes_fifos/fifo_writer.c`](https://github.com/sneharao1811/PBL/blob/main/research/siddanth_pipes_fifos/fifo_writer.c) | Phase 1 prototype: Named FIFO writer process using POSIX `mkfifo`. |
 | [`research/siddanth_pipes_fifos/fifo_reader.c`](https://github.com/sneharao1811/PBL/blob/main/research/siddanth_pipes_fifos/fifo_reader.c) | Phase 1 prototype: Named FIFO reader process ingesting byte streams. |
 | [`research/siddanth_pipes_fifos/IPC(Through Pipes and FIFOs).pdf`](https://github.com/sneharao1811/PBL/tree/main/research/siddanth_pipes_fifos) | Technical research report evaluating byte stream semantics, FIFO buffer thresholds, and pipe descriptor mechanics. |
-| [`deadlock_v4/src/banker.c`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/src/banker.c) | Banker's Deadlock Avoidance Engine: Safety Algorithm (`bankers_check_safety`) computing Work/Finish iteration to discover Safe Sequences; Resource-Request Algorithm (`bankers_request_resource`) validating Need/Available constraints, performing hypothetical state transitions, and denying unsafe allocations; Resource Release handler (`bankers_release_resource`) reclaiming held instances. |
 
 ---
 

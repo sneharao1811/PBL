@@ -2,13 +2,13 @@
 
 **Engineer:** Sneha  
 **Git Identity:** `sneharao1811` ([GitHub Profile](https://github.com/sneharao1811))  
-**Subsystems Owned:** UI Frontend Process, Interactive Shell & Protocol Serialization, First-Come-First-Served (FCFS) & Round Robin (RR) Scheduling Algorithms, Deadlock 12-Option CLI & GUI Frontend, Resource Allocation Graph (RAG) Visualizer, Project Documentation
+**Subsystems Owned:** UI Frontend Process, Interactive Shell & Protocol Serialization, First-Come-First-Served (FCFS) & Round Robin (RR) Scheduling Algorithms, Deadlock 12-Option CLI & GUI Frontend, Resource Allocation Graph (RAG) Visualizer, Page Replacement CLI & Web GUI, Project Documentation
 
 ---
 
 ## 1. Overview & Responsibilities
 
-Sneha was responsible for designing and implementing the interactive frontend process of the multi-process simulator, handling user terminal input, constructing IPC binary packets, formatting system responses, developing the core time-shared scheduling algorithms, and authoring the complete interactive CLI, Resource Allocation Graph (RAG) visualization, and Graphical User Interface (GUI) for the Week 4 Deadlock Simulation System.
+Sneha was responsible for designing and implementing the interactive frontend process of the multi-process simulator, handling user terminal input, constructing IPC binary packets, formatting system responses, developing the core time-shared scheduling algorithms, authoring the complete interactive CLI, Resource Allocation Graph (RAG) visualization, and Graphical User Interface (GUI) for the Week 4 Deadlock Simulation System, and developing the interactive terminal CLI shell and browser graphical user interface for the Page Replacement Simulation System.
 
 ### Subsystem Deliverables:
 1. **Interactive UI Process (`ui_proc`):** Authored [`src_v2/ui/ui_main.c`](https://github.com/sneharao1811/PBL/blob/main/src_v2/ui/ui_main.c), implementing the user command loop, syntax parser, and IPC message dispatcher.
@@ -18,9 +18,11 @@ Sneha was responsible for designing and implementing the interactive frontend pr
 5. **Round Robin Scheduling Engine:** Developed the preemptive Round Robin scheduling algorithm (`run_round_robin`) in [`scheduler_v3/src/scheduler.c`](https://github.com/sneharao1811/PBL/blob/main/scheduler_v3/src/scheduler.c), supporting configurable time quantum slices ($q$).
 6. **Deadlock Interactive CLI Shell:** Authored [`deadlock_v4/src/deadlock_cli.c`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/src/deadlock_cli.c), implementing the full 12-option menu loop for process/resource definition, matrix input, request dispatching, and status monitoring.
 7. **Resource Allocation Graph (RAG) Engine:** Built [`deadlock_v4/src/rag.c`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/src/rag.c), generating bipartite graph topologies, assignment/request edges, ASCII terminal views, and JSON telemetry export.
-8. **Interactive Graphical User Interface (GUI):** Developed the full browser console in [`deadlock_v4/gui/`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/gui/), featuring an HTML5 Canvas RAG renderer, dynamic live matrix editor, step-by-step Banker's algorithm stepper, and local Python server runner.
-9. **Project Laboratory Documentation:** Authored the comprehensive system documentation and technical report in [`README.md`](https://github.com/sneharao1811/PBL/blob/main/README.md).
-10. **Message Queue IPC Research:** Investigated POSIX and System V message queue primitives in [`research/sneha_message_queues/sender.c`](https://github.com/sneharao1811/PBL/blob/main/research/sneha_message_queues/sender.c) and [`receiver.c`](https://github.com/sneharao1811/PBL/blob/main/research/sneha_message_queues/receiver.c), authoring the technical report `IPC Through Message Passing and Message Queues.pdf`.
+8. **Deadlock Interactive Graphical User Interface (GUI):** Developed the full browser console in [`deadlock_v4/gui/`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/gui/), featuring an HTML5 Canvas RAG renderer, dynamic live matrix editor, step-by-step Banker's algorithm stepper, and local Python server runner.
+9. **Page Replacement Interactive CLI Shell:** Authored [`page_replacement/src/page_cli.c`](https://github.com/sneharao1811/PBL/blob/main/page_replacement/src/page_cli.c), implementing the student-facing terminal menu, algorithm selector (FIFO, LRU, Optimal, Compare All), automated `--demo` runner, and per-reference trace output.
+10. **Page Replacement Browser GUI Dashboard:** Developed [`page_replacement/gui/`](https://github.com/sneharao1811/PBL/blob/main/page_replacement/gui/) (`index.html`, `style.css`, `app.js`, `server.py`), featuring interactive inputs, real-time memory frame tables, hit/fault badges, and comparative fault visualization.
+11. **Project Laboratory Documentation:** Authored the comprehensive system documentation and technical report in [`README.md`](https://github.com/sneharao1811/PBL/blob/main/README.md).
+12. **Message Queue IPC Research:** Investigated POSIX and System V message queue primitives in [`research/sneha_message_queues/sender.c`](https://github.com/sneharao1811/PBL/blob/main/research/sneha_message_queues/sender.c) and [`receiver.c`](https://github.com/sneharao1811/PBL/blob/main/research/sneha_message_queues/receiver.c), authoring the technical report `IPC Through Message Passing and Message Queues.pdf`.
 
 ---
 
@@ -36,6 +38,11 @@ Sneha was responsible for designing and implementing the interactive frontend pr
 | [`deadlock_v4/gui/index.html`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/gui/index.html) | GUI dashboard layout: header with presets bar, Canvas RAG panel, matrix editor panel, algorithm controls, request dispatch, and activity log stream. |
 | [`deadlock_v4/gui/style.css`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/gui/style.css) | Design system: dark systems-console theme with CSS custom properties, glassmorphism panels, pulse animations, responsive grid layout, and state-colored indicators. |
 | [`deadlock_v4/gui/app.js`](https://github.com/sneharao1811/PBL/blob/main/deadlock_v4/gui/app.js) | GUI application controller (1174 lines): reactive state model, Canvas RAG renderer with animated edges, Banker's step-by-step playback stepper, detection/recovery engines, live matrix binding, resource request dispatcher, and event system. |
+| [`page_replacement/src/page_cli.c`](https://github.com/sneharao1811/PBL/blob/main/page_replacement/src/page_cli.c) | Interactive terminal shell for page replacement: CLI menu loop, reference string parsing, trace and comparative table formatters, quick demo mode. |
+| [`page_replacement/gui/index.html`](https://github.com/sneharao1811/PBL/blob/main/page_replacement/gui/index.html) | Page replacement GUI dashboard: workload inputs, reference string validator, step trace tables, and comparative fault bar chart. |
+| [`page_replacement/gui/style.css`](https://github.com/sneharao1811/PBL/blob/main/page_replacement/gui/style.css) | Clean systems presentation, responsive layout, status badge indicators (Hit/Fault), and tabular styling. |
+| [`page_replacement/gui/app.js`](https://github.com/sneharao1811/PBL/blob/main/page_replacement/gui/app.js) | Reactive front-end application logic for page replacement simulation, trace rendering, and ratio computation. |
+| [`page_replacement/gui/server.py`](https://github.com/sneharao1811/PBL/blob/main/page_replacement/gui/server.py) | Local zero-dependency Python web server delivering the Page Replacement GUI on port 8090. |
 | [`README.md`](https://github.com/sneharao1811/PBL/blob/main/README.md) | Laboratory technical report, team matrix, sequence diagrams, benchmark comparisons, and user guide. |
 | [`research/sneha_message_queues/sender.c`](https://github.com/sneharao1811/PBL/blob/main/research/sneha_message_queues/sender.c) | Phase 1 prototype: Message queue sender process demonstrating discrete message generation. |
 | [`research/sneha_message_queues/receiver.c`](https://github.com/sneharao1811/PBL/blob/main/research/sneha_message_queues/receiver.c) | Phase 1 prototype: Message queue receiver process reading formatted IPC payloads. |

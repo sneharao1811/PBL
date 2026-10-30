@@ -24,11 +24,12 @@
 
 ## Project Architecture & Scope
 
-This project implements three core systems deliverables for the OS PBL curriculum:
+This project includes four operating-systems simulation deliverables:
 
 1. **[Week 3: CPU Process Scheduling Simulator](#1-week-3--cpu-process-scheduling-simulator)**: An interactive simulator evaluating **FCFS, SJF (Preemptive & Non-Preemptive), Priority (Preemptive & Non-Preemptive), and Round Robin** with automated ASCII Gantt charts and performance analysis across 3 test datasets.
 2. **[Week 4: Multi-Process CPU Simulator with POSIX IPC](#2-week-4--multi-process-simulator-with-posix-ipc)**: A modular system decoupling a single-process CPU simulator into **three independent cooperating processes** (UI, Core, Logger) communicating via POSIX Message Queues with an asynchronous in-core worker thread.
 3. **[Week 4: Interactive Deadlock Simulation System (with GUI)](#3-week-4--interactive-deadlock-simulation-system-with-gui)**: An interactive simulation and analysis platform managing multi-process resource allocation, evaluating **SAFE / UNSAFE / DEADLOCKED** states, running **Banker's Algorithm**, detecting deadlocks, executing automated recovery policies, and visualizing **Resource Allocation Graphs (RAG)** via both a 12-item CLI and a modern Graphical User Interface (GUI).
+4. **[Page Replacement Simulator](#4-page-replacement-simulator)**: A browser GUI that simulates FIFO, LRU, and Optimal page replacement, shows every frame state, and compares hit and fault counts and ratios.
 
 ---
 
@@ -264,6 +265,30 @@ The simulator manages $N$ processes competing for $M$ resource types with dynami
 
 ---
 
+## 4. Page Replacement Simulator
+
+An interactive simulation and comparative analysis platform for virtual memory management evaluating **First-In, First-Out (FIFO)**, **Least Recently Used (LRU)**, and **Belady's Optimal Replacement (OPT / MIN)**. The system processes arbitrary page-reference strings across configurable physical frame capacities, identifying page hits and page faults, tracking step-by-step frame contents, computing hit and fault ratios, and benchmarking algorithm efficiency.
+
+### Key Capabilities:
+1. **Algorithmic Policies:**
+   - **FIFO (`fifo.c`):** Circular replacement pointer tracking oldest resident allocations; demonstrates **Belady's Anomaly** under specific non-stack workloads.
+   - **LRU (`lru.c`):** Chronological reference timestamping tracking temporal locality; mathematically immune to Belady's Anomaly (stack property).
+   - **Optimal (`optimal.c`):** Clairvoyant future reference lookahead scanning; establishes the theoretical minimum fault lower bound for offline reference strings.
+2. **Dual Operational Surfaces:**
+   - **Native C Terminal CLI (`bin/page_replacement_cli`):** Full interactive console loop accepting space/comma reference tokens and frame counts, with formatted per-step ASCII trace tables, status badges, and comparative summary matrices. Includes automated demo mode (`--demo`).
+   - **Interactive Browser GUI (`page_replacement/gui/`):** Clean, responsive dashboard with dynamic input validation, real-time memory frame tables, hit/fault badges, and a comparative fault bar visualizer with zero external dependencies.
+3. **Automated Verification Harness (`page_sim.py`):**
+   - Independent cross-platform Python implementation verifying algorithmic parity against Silberschatz reference benchmarks, Belady's Anomaly proofs, and LRU stack properties.
+
+### Sample Simulation Trace (`7 0 1 2 0 3 0 4 2 3`, 3 Frames):
+| Algorithm | Page Hits | Page Faults | Hit Ratio | Fault Ratio | Notes |
+| :--- | :---: | :---: | :---: | :---: | :--- |
+| **FIFO** | 1 | 9 | 10.00% | 90.00% | Suffers from Belady's Anomaly |
+| **LRU** | 2 | 8 | 20.00% | 80.00% | Temporal locality stack policy |
+| **Optimal** | 4 | 6 | 40.00% | 60.00% | Theoretical Lower Bound |
+
+---
+
 ## Quickstart & Execution Guide
 
 ### Prerequisites
@@ -303,7 +328,30 @@ python deadlock_v4/gui/server.py
 bin/deadlock_gui.bat
 ```
 
-### 6. Run Automated Benchmark Comparison
+### 6. Run Page Replacement Simulation CLI (Native C)
+```bash
+# Build and run native CLI:
+make page-replacement-cli
+# Or run quick demo:
+./bin/page_replacement_cli --demo
+```
+
+### 7. Launch Page Replacement Simulator GUI
+```bash
+# Start local server and open browser GUI:
+make page-replacement-gui
+# Or run direct python server:
+python3 page_replacement/gui/server.py
+```
+
+### 8. Run Automated Page Replacement Test Suite
+```bash
+make test-page-replacement
+# Or run directly via Python:
+python3 page_replacement/page_sim.py --test
+```
+
+### 9. Run Automated Benchmark Comparison
 ```bash
 make benchmark
 ```
@@ -328,9 +376,24 @@ PBL/
 │   ├── deadlock_sim.py                # Standalone cross-platform CLI & simulation engine
 │   ├── gui/                           # Interactive Graphical User Interface (GUI)
 │   │   ├── index.html                 # Dashboard layout & controls
-│   │   ├── style.css                  # High-contrast systems console design system
+│   │   ├── style.css                  # Light dashboard styles
 │   │   ├── app.js                     # Canvas RAG engine, live matrix binding, stepper
 │   │   └── server.py                  # Local zero-dependency HTTP server & browser launcher
+│   └── Makefile
+│
+├── page_replacement/                  # Week 5: Virtual Memory Page Replacement Simulator
+│   ├── include/page_replacement.h     # State models, page_step_t, page_result_t
+│   ├── src/page_core.c                # Reference token parser, metrics, trace formatters
+│   ├── src/fifo.c                     # First-In, First-Out (FIFO) replacement policy
+│   ├── src/lru.c                      # Least Recently Used (LRU) replacement policy
+│   ├── src/optimal.c                  # Belady's Optimal (MIN) clairvoyant policy
+│   ├── src/page_cli.c                 # Student-facing interactive terminal CLI & demo mode
+│   ├── page_sim.py                    # Standalone Python runner & verification test suite
+│   ├── gui/                           # Responsive Web Graphical User Interface (GUI)
+│   │   ├── index.html                 # Simulator form, trace table & fault comparison
+│   │   ├── style.css                  # Responsive presentation & state styling
+│   │   ├── app.js                     # Front-end simulation engine & ratio renderer
+│   │   └── server.py                  # Local zero-dependency HTTP server & launcher
 │   └── Makefile
 │
 ├── scheduler_v3/                      # Week 3: CPU Process Scheduling Simulator
@@ -362,8 +425,12 @@ PBL/
 │   ├── run_benchmark.sh               # Execution timer & metric collector
 │   └── results.txt                    # Benchmark output logs
 │
+├── deliverables_notes/                # Team contribution and subsystem records
+│   └── PAGE_REPLACEMENT.md            # Verified work and proposed review ownership
+│
 └── docs/                              # Detailed engineering specifications
     ├── ARCHITECTURE.md                # Multi-process system design & protocol specs
+    ├── PAGE_REPLACEMENT_ARCHITECTURE.md # Page-replacement algorithms and UI behavior
     ├── DEADLOCK_ARCHITECTURE.md        # Deadlock simulation system architecture & algorithm flows
     ├── IPC_COMPARISON.md              # In-depth analysis of all 4 IPC mechanisms
     └── BENCHMARKS.md                  # Detailed performance analysis
