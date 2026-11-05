@@ -117,7 +117,7 @@ Gantt Chart:
 
 ---
 
-## 2. Week 4 — Multi-Process Simulator with POSIX IPC
+## 2. Week 2 — Multi-Process Simulator with POSIX IPC
 
 ### Objective
 > *"Enhance the existing simulator by separating it into three independent processes and enabling communication between them using an appropriate POSIX IPC mechanism."*
